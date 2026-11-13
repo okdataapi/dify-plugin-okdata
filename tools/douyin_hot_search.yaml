@@ -1,0 +1,54 @@
+identity:
+  name: douyin_hot_search
+  author: okdata
+  label:
+    en_US: Douyin Hot Search
+    zh_Hans: 抖音热搜榜
+description:
+  human:
+    en_US: The current Douyin hot search board, with rank and heat. Refreshed at most every 10 minutes.
+    zh_Hans: 当前的抖音热搜榜，带排名和热度。最多每 10 分钟刷新一次。
+  llm: Get the current Douyin hot search board (what is trending on Douyin in China right now), about 50 entries with rank, name, heat and url. No inputs. Billed per call.
+parameters:
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/douyin_hot_search.py

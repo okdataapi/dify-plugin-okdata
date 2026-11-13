@@ -1,0 +1,71 @@
+identity:
+  name: youtube_transcript
+  author: okdata
+  label:
+    en_US: YouTube Transcript
+    zh_Hans: YouTube 视频字幕
+description:
+  human:
+    en_US: The transcript of a YouTube video with timestamps, in the original or a chosen language. Accepts a video ID or link.
+    zh_Hans: YouTube 视频的字幕，带时间戳，原语言或指定语言。可以填视频 ID 或链接。
+  llm: Get the transcript (subtitles) of a YouTube video as text with timestamped segments. Input the 11-character video id or any YouTube link (watch, youtu.be, shorts). Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Video ID or link
+    zh_Hans: 视频 ID 或链接
+  human_description:
+    en_US: The 11-character video ID, or a youtube.com / youtu.be link.
+    zh_Hans: 11 位视频 ID，或 youtube.com / youtu.be 链接。
+  llm_description: The YouTube video id (11 characters) or a YouTube link.
+  placeholder:
+    en_US: dQw4w9WgXcQ
+    zh_Hans: dQw4w9WgXcQ
+- name: lang
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Language
+    zh_Hans: 语言
+  human_description:
+    en_US: Preferred transcript language code, e.g. en or zh. Leave empty for the original language.
+    zh_Hans: 优先的字幕语言代码，如 en 或 zh。留空用原语言。
+  llm_description: Optional preferred transcript language code such as en, zh, ja. Leave empty for the original track.
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    item:
+      type: object
+      description: The object returned
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/youtube_transcript.py

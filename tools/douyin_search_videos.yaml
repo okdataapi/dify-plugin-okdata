@@ -1,0 +1,104 @@
+identity:
+  name: douyin_search_videos
+  author: okdata
+  label:
+    en_US: Douyin Video Search
+    zh_Hans: 抖音视频搜索
+description:
+  human:
+    en_US: Search Douyin (China's TikTok) videos by keywords, with likes, comments, shares and the author. About 20 videos per call.
+    zh_Hans: 按关键词搜抖音视频，带点赞、评论、转发和作者。每次调用约 20 条。
+  llm: Search Douyin (Chinese TikTok) videos by keywords; Chinese keywords work best. Returns about 20 videos per page with id, url, text, author, published_at and metrics. Use the video id with the Douyin video comments tool. Billed per call.
+parameters:
+- name: query
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Keywords
+    zh_Hans: 关键词
+  human_description:
+    en_US: Search words, as typed into the Douyin search box. Chinese keywords give the best results.
+    zh_Hans: 搜索词，和在抖音搜索框里输入的一样。
+  llm_description: Keywords to search Douyin for, usually in Chinese, e.g. 露营装备.
+  placeholder:
+    en_US: camping gear
+    zh_Hans: 露营装备
+- name: sort
+  type: select
+  required: false
+  form: llm
+  default: relevance
+  label:
+    en_US: Order
+    zh_Hans: 排序
+  human_description:
+    en_US: Result order.
+    zh_Hans: 结果排序。
+  llm_description: relevance (default), latest or most_liked.
+  options:
+  - value: relevance
+    label:
+      en_US: Most relevant
+      zh_Hans: 综合
+  - value: latest
+    label:
+      en_US: Newest
+      zh_Hans: 最新
+  - value: most_liked
+    label:
+      en_US: Most liked
+      zh_Hans: 最多点赞
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate, separately billed call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独计费的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is billed as a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.05
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/douyin_search_videos.py

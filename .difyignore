@@ -1,0 +1,27 @@
+# Development state never goes into the .difypkg
+.git/
+.github/
+.gitignore
+.difyignore
+.venv/
+venv/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.difypkg
+tests/
+scripts/
+requirements-dev.txt
+dist/

@@ -1,0 +1,39 @@
+version: 0.1.0
+type: plugin
+author: okdata
+name: okdata
+label:
+  en_US: okdata Social Data
+  zh_Hans: okdata 社媒数据
+description:
+  en_US: "Social media data for workflows and agents: TikTok, RedNote (Xiaohongshu), Douyin, WeChat Official Accounts, Weibo, X, YouTube and 10 more platforms. Search posts, read comments, hot lists, article reads and transcripts with one okdata API key, billed per call; failed calls are free."
+  zh_Hans: "给工作流和智能体用的社媒数据：抖音、小红书、公众号、视频号、微博、B站、快手、TikTok、X、YouTube 等 17 个平台。搜笔记和视频、拉评论、看热搜、查公众号阅读数、取字幕，一个 okdata Key 按次计费，失败不扣费。"
+icon: icon.svg
+tags:
+  - social
+  - search
+  - videos
+resource:
+  memory: 268435456
+  permission: {}
+plugins:
+  tools:
+    - provider/okdata.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: 1.9.0
+created_at: 2026-11-13T00:00:00Z
+privacy: PRIVACY.md
+repo: https://github.com/okdataapi/dify-plugin-okdata
+contact: hello@okdata.online
+network:
+  domains:
+    - api.okdata.online
+verified: false

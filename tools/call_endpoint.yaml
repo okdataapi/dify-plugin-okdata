@@ -1,0 +1,110 @@
+identity:
+  name: call_endpoint
+  author: okdata
+  label:
+    en_US: Call Any okdata Endpoint
+    zh_Hans: 调用任意 okdata 接口
+description:
+  human:
+    en_US: Call any of okdata's 200+ endpoints by its id, such as kuaishou.videos.search or instagram.users.get, with parameters as JSON. Billed per call at the endpoint's price.
+    zh_Hans: 按接口 ID 调用 okdata 的任意接口（如 kuaishou.videos.search、bilibili.trends.list），参数用 JSON 传。按该接口的价格按次计费。
+  llm: 'Call any okdata endpoint by id with its parameters. Look up the id and the parameters first with the free Find an okdata Endpoint tool. Paging: pass next_cursor from the previous result as params.cursor. Billed per call at the endpoint''s price; calls above the configured price cap are refused and cost nothing.'
+parameters:
+- name: endpoint_id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Endpoint ID
+    zh_Hans: 接口 ID
+  human_description:
+    en_US: The endpoint id from the okdata catalog, e.g. bilibili.trends.list. See okdata.online/apis.
+    zh_Hans: okdata 目录里的接口 ID，如 bilibili.trends.list。见 okdata.online/zh/apis。
+  llm_description: The okdata endpoint id, e.g. douyin.videos.search or reddit.posts.comments.list (from the Find an okdata Endpoint tool).
+  placeholder:
+    en_US: bilibili.trends.list
+    zh_Hans: bilibili.trends.list
+- name: params
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Parameters (JSON)
+    zh_Hans: 参数（JSON）
+  human_description:
+    en_US: 'The endpoint''s parameters as a JSON object, e.g. {"query": "coffee", "sort": "latest"}. Leave empty when it takes none.'
+    zh_Hans: '接口参数，写成 JSON 对象，如 {"query": "咖啡", "sort": "latest"}。没有参数时留空。'
+  llm_description: 'A JSON object with the endpoint''s parameters, e.g. {"query": "coffee", "sort": "latest"}; for the next page add "cursor": "<next_cursor>". Use {} or leave empty when the endpoint takes no parameters.'
+  placeholder:
+    en_US: '{"query": "coffee"}'
+    zh_Hans: '{"query": "咖啡"}'
+- name: view
+  type: select
+  required: false
+  form: form
+  default: standard
+  label:
+    en_US: Detail level
+    zh_Hans: 字段详细程度
+  human_description:
+    en_US: How many fields come back per object. Same price either way.
+    zh_Hans: 每个对象返回多少字段。价格相同。
+  llm_description: compact, standard (default) or full.
+  options:
+  - value: compact
+    label:
+      en_US: Compact (fewer fields)
+      zh_Hans: 精简
+  - value: standard
+    label:
+      en_US: Standard
+      zh_Hans: 标准
+  - value: full
+    label:
+      en_US: Full (platform extras)
+      zh_Hans: 完整
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.1
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+    item:
+      type: object
+      description: The object returned, for endpoints that return one object
+extra:
+  python:
+    source: tools/call_endpoint.py

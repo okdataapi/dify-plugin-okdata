@@ -1,0 +1,133 @@
+identity:
+  name: find_endpoint
+  author: okdata
+  label:
+    en_US: Find an okdata Endpoint (free)
+    zh_Hans: 查找 okdata 接口（免费）
+description:
+  human:
+    en_US: 'Search okdata''s 200+ endpoints on 17 platforms by plain words in English or Chinese, with each one''s price and parameters. Free: no call is billed.'
+    zh_Hans: 用中文或英文描述你要的数据，在 17 个平台的 200 多个 okdata 接口里查找，返回价格和参数。免费，不扣钱。
+  llm: Free lookup. Find okdata endpoints for a data need described in plain words (English or Chinese), e.g. 'kuaishou video comments', 'instagram profile', 'bilibili popular'. Returns endpoint ids with price, required and optional params. Then use the Call Any okdata Endpoint tool with that endpoint_id.
+parameters:
+- name: query
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: What data
+    zh_Hans: 要什么数据
+  human_description:
+    en_US: Plain words, e.g. 'kuaishou comments' or 'B站 热门'.
+    zh_Hans: 直接描述，如“快手 评论”或“bilibili popular”。
+  llm_description: Plain words describing the data needed, in English or Chinese, e.g. 'reddit post comments' or '知乎 回答'.
+  placeholder:
+    en_US: bilibili popular videos
+    zh_Hans: B站 热门视频
+- name: platform
+  type: select
+  required: false
+  form: llm
+  label:
+    en_US: Platform
+    zh_Hans: 平台
+  human_description:
+    en_US: Only endpoints of this platform. Leave empty for all.
+    zh_Hans: 只看这个平台的接口。留空表示全部。
+  llm_description: 'Optional platform id to narrow the search: tiktok, xiaohongshu, douyin, wechat_mp, wechat_channels, wechat, weibo, bilibili, kuaishou, zhihu, x, youtube, instagram, reddit, telegram, meta, google.'
+  options:
+  - value: tiktok
+    label:
+      en_US: TikTok
+      zh_Hans: TikTok
+  - value: xiaohongshu
+    label:
+      en_US: RedNote (Xiaohongshu)
+      zh_Hans: 小红书
+  - value: douyin
+    label:
+      en_US: Douyin
+      zh_Hans: 抖音
+  - value: wechat_mp
+    label:
+      en_US: WeChat Official Accounts
+      zh_Hans: 微信公众号
+  - value: wechat_channels
+    label:
+      en_US: WeChat Channels
+      zh_Hans: 微信视频号
+  - value: wechat
+    label:
+      en_US: WeChat Search
+      zh_Hans: 微信搜一搜
+  - value: weibo
+    label:
+      en_US: Weibo
+      zh_Hans: 微博
+  - value: bilibili
+    label:
+      en_US: Bilibili
+      zh_Hans: B站
+  - value: kuaishou
+    label:
+      en_US: Kuaishou
+      zh_Hans: 快手
+  - value: zhihu
+    label:
+      en_US: Zhihu
+      zh_Hans: 知乎
+  - value: x
+    label:
+      en_US: X (Twitter)
+      zh_Hans: X（推特）
+  - value: youtube
+    label:
+      en_US: YouTube
+      zh_Hans: YouTube
+  - value: instagram
+    label:
+      en_US: Instagram
+      zh_Hans: Instagram
+  - value: reddit
+    label:
+      en_US: Reddit
+      zh_Hans: Reddit
+  - value: telegram
+    label:
+      en_US: Telegram
+      zh_Hans: Telegram
+  - value: meta
+    label:
+      en_US: Meta Ad Library
+      zh_Hans: Meta 广告库
+  - value: google
+    label:
+      en_US: Google Ads Transparency
+      zh_Hans: Google 广告透明中心
+- name: limit
+  type: number
+  required: false
+  form: form
+  default: 5
+  min: 1
+  max: 20
+  label:
+    en_US: Results
+    zh_Hans: 结果数
+  human_description:
+    en_US: How many endpoints to return, 1 to 20.
+    zh_Hans: 返回几个接口，1 到 20。
+output_schema:
+  type: object
+  properties:
+    endpoints:
+      type: array
+      items:
+        type: object
+      description: Matching endpoints with id, price, params and docs link
+    count:
+      type: number
+      description: How many endpoints matched
+extra:
+  python:
+    source: tools/find_endpoint.py

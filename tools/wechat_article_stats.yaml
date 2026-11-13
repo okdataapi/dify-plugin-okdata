@@ -1,0 +1,60 @@
+identity:
+  name: wechat_article_stats
+  author: okdata
+  label:
+    en_US: WeChat Article Reads and Likes
+    zh_Hans: 公众号文章阅读数和点赞数
+description:
+  human:
+    en_US: 'The current counts of an Official Account article by its link: reads, likes, recommends (Wow), shares, saves and comments.'
+    zh_Hans: 按文章链接取公众号文章此刻的数字：阅读、点赞、在看、分享、收藏和评论。
+  llm: Get the current read, like, recommend (在看, in ext.recommends), share, save and comment counts of a WeChat Official Account article by its mp.weixin.qq.com link. Only the counts, not the text. Billed per call.
+parameters:
+- name: url
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Article link
+    zh_Hans: 文章链接
+  human_description:
+    en_US: 'The article link: the long mp.weixin.qq.com/s?__biz=... link or the short /s/ link.'
+    zh_Hans: 文章链接：带 __biz 的长链接，或 /s/ 开头的短链接。
+  llm_description: The article link on mp.weixin.qq.com (long link with __biz, mid, idx, sn, or the short /s/ link).
+  placeholder:
+    en_US: https://mp.weixin.qq.com/s/...
+    zh_Hans: https://mp.weixin.qq.com/s/...
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.05
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    item:
+      type: object
+      description: The object returned
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/wechat_article_stats.py

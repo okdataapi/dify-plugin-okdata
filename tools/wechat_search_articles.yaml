@@ -1,0 +1,148 @@
+identity:
+  name: wechat_search_articles
+  author: okdata
+  label:
+    en_US: 'WeChat Search: Articles and Channels Videos'
+    zh_Hans: 微信搜一搜：公众号文章和视频号
+description:
+  human:
+    en_US: 'WeChat Search results for keywords: Official Account articles and Channels videos, by relevance, newest or hottest, with the account name, time posted and article link.'
+    zh_Hans: 按关键词取微信搜一搜结果：公众号文章和视频号视频，可按相关、最新或最热排，带账号名称、发布时间和文章链接。
+  llm: Search WeChat (微信搜一搜) for Official Account articles and Channels videos by keywords, usually Chinese. Returns about 20 results per page with title, source account name, time posted, and the article url (use it with the WeChat article reads tool). Billed per call.
+parameters:
+- name: query
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Keywords
+    zh_Hans: 关键词
+  human_description:
+    en_US: Search words, as typed into WeChat Search. Chinese keywords give the best results.
+    zh_Hans: 搜索词，和在微信搜一搜里输入的一样。
+  llm_description: Keywords to search WeChat for, usually in Chinese, e.g. 咖啡店开业.
+  placeholder:
+    en_US: coffee shop opening
+    zh_Hans: 咖啡店开业
+- name: sort
+  type: select
+  required: false
+  form: llm
+  default: relevance
+  label:
+    en_US: Order
+    zh_Hans: 排序
+  human_description:
+    en_US: Result order.
+    zh_Hans: 结果排序。
+  llm_description: relevance (default), latest or popular.
+  options:
+  - value: relevance
+    label:
+      en_US: Most relevant
+      zh_Hans: 综合
+  - value: latest
+    label:
+      en_US: Newest
+      zh_Hans: 最新
+  - value: popular
+    label:
+      en_US: Most popular
+      zh_Hans: 最热
+- name: published_within
+  type: select
+  required: false
+  form: llm
+  label:
+    en_US: Posted within
+    zh_Hans: 发布时间
+  human_description:
+    en_US: Only results posted in this period. Leave empty for any time.
+    zh_Hans: 只要这段时间内发布的。留空表示不限。
+  llm_description: 'Optional: day, week or half_year. Leave empty for any time.'
+  options:
+  - value: day
+    label:
+      en_US: Last day
+      zh_Hans: 一天内
+  - value: week
+    label:
+      en_US: Last week
+      zh_Hans: 一周内
+  - value: half_year
+    label:
+      en_US: Last half year
+      zh_Hans: 半年内
+- name: type
+  type: select
+  required: false
+  form: llm
+  label:
+    en_US: Result type
+    zh_Hans: 结果类型
+  human_description:
+    en_US: Only articles or only Channels videos. Leave empty for both.
+    zh_Hans: 只要公众号文章或只要视频号视频。留空表示都要。
+  llm_description: 'Optional: article or video. Leave empty for both, mixed.'
+  options:
+  - value: article
+    label:
+      en_US: Official Account articles
+      zh_Hans: 公众号文章
+  - value: video
+    label:
+      en_US: Channels videos
+      zh_Hans: 视频号视频
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate, separately billed call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独计费的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is billed as a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.05
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/wechat_search_articles.py

@@ -1,0 +1,46 @@
+identity:
+  author: okdata
+  name: okdata
+  label:
+    en_US: okdata Social Data
+    zh_Hans: okdata 社媒数据
+  description:
+    en_US: "Social media data for workflows and agents: TikTok, RedNote (Xiaohongshu), Douyin, WeChat Official Accounts, Weibo, X, YouTube and 10 more platforms. Search posts, read comments, hot lists, article reads and transcripts with one okdata API key, billed per call; failed calls are free."
+    zh_Hans: "给工作流和智能体用的社媒数据：抖音、小红书、公众号、视频号、微博、B站、快手、TikTok、X、YouTube 等 17 个平台。搜笔记和视频、拉评论、看热搜、查公众号阅读数、取字幕，一个 okdata Key 按次计费，失败不扣费。"
+  icon: icon.svg
+  tags:
+    - social
+    - search
+    - videos
+credentials_for_provider:
+  okdata_api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: okdata API key
+      zh_Hans: okdata API Key
+    placeholder:
+      en_US: okd_...
+      zh_Hans: okd_...
+    help:
+      en_US: Create a key in the okdata console (new accounts get trial credit). Each data call is billed to this key's balance; looking up endpoints and failed calls are free.
+      zh_Hans: 在 okdata 控制台创建 Key（新账号有试用额度）。每次数据调用从这个 Key 的余额扣费；查接口和失败的调用不扣钱。
+    url: https://okdata.online/signup/?src=dify-plugin
+tools:
+  - tools/tiktok_search_videos.yaml
+  - tools/xiaohongshu_search_notes.yaml
+  - tools/xiaohongshu_note_comments.yaml
+  - tools/douyin_search_videos.yaml
+  - tools/douyin_video_comments.yaml
+  - tools/douyin_hot_search.yaml
+  - tools/weibo_hot_search.yaml
+  - tools/wechat_search_articles.yaml
+  - tools/wechat_account_articles.yaml
+  - tools/wechat_article_stats.yaml
+  - tools/x_search_posts.yaml
+  - tools/youtube_transcript.yaml
+  - tools/find_endpoint.yaml
+  - tools/call_endpoint.yaml
+extra:
+  python:
+    source: provider/okdata.py
