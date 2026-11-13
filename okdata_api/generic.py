@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 from collections.abc import Generator, Mapping
 from typing import Any
 
@@ -13,6 +14,17 @@ MAX_FIND_RESULTS = 20
 DEFAULT_FIND_RESULTS = 5
 RESERVED_PARAMS = frozenset({"max_price"})
 SCALARS = (str, int, float, bool)
+FREE_FORM_PARAMS = frozenset({"cursor", "view", "fields"})
+
+
+def _refuse_constant(name: str) -> Any:
+    raise client.OkdataError("invalid_params", f"params may not contain {name}")
+
+
+def _is_scalar(value: Any) -> bool:
+    if isinstance(value, float) and not math.isfinite(value):
+        return False
+    return isinstance(value, SCALARS)
 
 
 def parse_params(raw: Any) -> dict[str, Any]:
@@ -23,7 +35,7 @@ def parse_params(raw: Any) -> dict[str, Any]:
         parsed: Any = dict(raw)
     else:
         try:
-            parsed = json.loads(str(raw))
+            parsed = json.loads(str(raw), parse_constant=_refuse_constant)
         except json.JSONDecodeError as err:
             raise client.OkdataError(
                 "invalid_params",
@@ -32,8 +44,8 @@ def parse_params(raw: Any) -> dict[str, Any]:
     if not isinstance(parsed, dict):
         raise client.OkdataError("invalid_params", 'params must be a JSON object such as {"query": "coffee"}')
     for name, value in parsed.items():
-        ok = value is None or isinstance(value, SCALARS)
-        ok = ok or (isinstance(value, list) and all(isinstance(v, SCALARS) for v in value))
+        ok = value is None or _is_scalar(value)
+        ok = ok or (isinstance(value, list) and all(_is_scalar(v) for v in value))
         if not ok:
             raise client.OkdataError(
                 "invalid_params", f"params.{name} must be a string, number, true/false or a list of those"
@@ -68,8 +80,16 @@ def call_endpoint(tool: Any, tool_parameters: Mapping[str, Any]) -> Generator[An
     if endpoint is None:
         raise _unknown_endpoint(data, endpoint_id)
 
-    method = str(endpoint.get("method") or "GET").upper()
-    path = str(endpoint.get("path") or client.endpoint_path(endpoint_id))
+    accepted = {str(p.get("name")) for p in endpoint.get("params") or []} | FREE_FORM_PARAMS
+    unknown = sorted(set(params) - accepted)
+    if unknown:
+        raise client.OkdataError(
+            "invalid_params",
+            f"{endpoint_id} does not take {', '.join(unknown)}. It takes: {', '.join(sorted(accepted))}",
+        )
+
+    method = "POST" if str(endpoint.get("method")).upper() == "POST" else "GET"
+    path = client.endpoint_path(endpoint_id)  # built from the id, never taken from elsewhere
     if method == "GET":
         envelope = client.request("GET", path, api_key=api_key, params=params, max_price=max_price)
     else:
@@ -84,7 +104,7 @@ def call_endpoint(tool: Any, tool_parameters: Mapping[str, Any]) -> Generator[An
 def _limit(raw: Any) -> int:
     try:
         value = int(float(raw)) if raw not in (None, "") else DEFAULT_FIND_RESULTS
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         value = DEFAULT_FIND_RESULTS
     return max(1, min(MAX_FIND_RESULTS, value))
 

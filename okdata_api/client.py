@@ -8,6 +8,8 @@ so a retried call is never billed twice.
 
 from __future__ import annotations
 
+import math
+import re
 import time
 import uuid
 from collections.abc import Mapping
@@ -27,6 +29,9 @@ TIMEOUT_SECONDS = 60.0
 MAX_RETRY_WAIT_SECONDS = 5.0
 DEFAULT_RETRY_WAIT_SECONDS = 1.0
 RETRYABLE = frozenset({"yes", "same_key"})
+METHODS = frozenset({"GET", "POST"})
+ENDPOINT_ID = re.compile(r"^[a-z0-9_]+(?:\.[a-z0-9_]+)+$")
+API_PATH = re.compile(r"^/v1/[a-z0-9_/]+$")
 MAX_PRICE_CEILING = Decimal("100")
 
 
@@ -82,7 +87,8 @@ class OkdataError(Exception):
             str(body.get("code") or "error"),
             str(body.get("message") or "The request failed"),
             status=status,
-            billed=body.get("charged", False),  # the API field that says whether the call was billed
+            # okdata's own field for whether this call was billed; unknown when a proxy answered instead.
+            billed=body.get("charged") if "charged" in body else None,
             request_id=body.get("request_id"),
             problems=tuple(str(p) for p in problems) if isinstance(problems, list) else (),
             next_step=body.get("next_step"),
@@ -102,9 +108,10 @@ def _billed_sentence(billed: bool | None) -> str:
 
 def _float_or_none(value: Any) -> float | None:
     try:
-        return None if value is None else float(value)
+        number = None if value is None else float(value)
     except (TypeError, ValueError):
         return None
+    return number if number is not None and math.isfinite(number) and number >= 0 else None
 
 
 def normalize_api_key(raw: Any) -> str:
@@ -198,7 +205,9 @@ def _send_once(
             billed=None,
         ) from err
     if not isinstance(payload, dict):
-        raise OkdataError("bad_response", "okdata answered with an unexpected shape", status=response.status_code)
+        raise OkdataError(
+            "bad_response", "okdata answered with an unexpected shape", status=response.status_code, billed=None
+        )
     if response.is_success and payload.get("code") == "ok":
         return payload
     raise OkdataError.from_body(response.status_code, payload)
@@ -214,14 +223,21 @@ def request(
     max_price: str | None = None,
     idempotent: bool = True,
 ) -> dict[str, Any]:
-    """Sends one call (plus at most one retry) and returns the success envelope, or raises OkdataError."""
+    """Sends one call (plus at most one retry) and returns the success envelope, or raises OkdataError.
+
+    Only relative /v1/ paths on api.okdata.online and GET or POST are accepted, so the key can
+    never be sent anywhere else.
+    """
+    method = method.upper()
+    if method not in METHODS or not API_PATH.match(path) or ".." in path:
+        raise OkdataError("invalid_request", f"Refused to send {method} {path!r}: not an okdata API path")
     paid = bool(api_key) and idempotent
     idempotency_key = str(uuid.uuid4()) if paid else None
     headers = _headers(api_key, max_price, idempotency_key)
     query = clean_params(params)
     for attempt in (1, 2):
         try:
-            return _send_once(method.upper(), path, headers, query, body)
+            return _send_once(method, path, headers, query, body)
         except (httpx.ConnectError, httpx.ConnectTimeout) as err:
             # The request never reached okdata, so nothing was billed and a retry is safe.
             if attempt == 2:
@@ -229,12 +245,15 @@ def request(
                     "connection_error", f"Could not connect to api.okdata.online ({type(err).__name__})"
                 ) from err
             time.sleep(DEFAULT_RETRY_WAIT_SECONDS)
-        except httpx.TransportError as err:
+        except (httpx.HTTPError, httpx.InvalidURL) as err:
             # The request may have reached okdata; no second wait inside Dify's own time limit.
             raise OkdataError(
                 "client_timeout" if isinstance(err, httpx.TimeoutException) else "connection_error",
                 f"The answer from api.okdata.online did not arrive ({type(err).__name__})",
                 billed=None if paid else False,
+                next_step="The call may still finish. Check Calls in the okdata console before running it again"
+                if paid
+                else None,
             ) from err
         except OkdataError as err:
             wait = err.retry_after_seconds if err.retry_after_seconds is not None else DEFAULT_RETRY_WAIT_SECONDS
@@ -245,6 +264,8 @@ def request(
 
 
 def endpoint_path(endpoint_id: str) -> str:
+    if not ENDPOINT_ID.match(endpoint_id):
+        raise OkdataError("unknown_endpoint", f"{endpoint_id!r} is not an okdata endpoint id")
     return "/v1/" + endpoint_id.replace(".", "/")
 
 

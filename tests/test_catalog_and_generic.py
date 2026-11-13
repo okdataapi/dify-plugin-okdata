@@ -170,3 +170,32 @@ class TestPackageConsistency:
             api_params = {p["name"] for p in endpoint["params"]}
             assert set(spec.params) <= api_params, spec.endpoint_id
             assert Decimal(endpoint["maxCharge"]) <= Decimal(spec.max_price), spec.endpoint_id
+
+
+class TestCallEndpointHardening:
+    def test_unknown_param_is_refused_before_a_paid_call(self, api, catalog_body):
+        api.handler = lambda request: (200, catalog_body)
+        with pytest.raises(client.OkdataError) as err:
+            run_tool("call_endpoint", {"endpoint_id": "x.posts.search", "params": '{"query": "a", "Max_Price": "9"}'})
+        assert err.value.code == "invalid_params" and "Max_Price" in str(err.value)
+        assert [r.url.path for r in api.requests] == ["/v1/catalog"]
+
+    @pytest.mark.parametrize("raw", ['{"query": NaN}', '{"query": Infinity}'])
+    def test_non_finite_numbers_are_refused(self, api, raw):
+        with pytest.raises(client.OkdataError) as err:
+            run_tool("call_endpoint", {"endpoint_id": "x.posts.search", "params": raw})
+        assert err.value.code == "invalid_params"
+
+    def test_path_comes_from_the_id_not_the_catalog(self, api, catalog_body):
+        body = json.loads(json.dumps(catalog_body))
+        for endpoint in body["data"]["endpoints"]:
+            if endpoint["id"] == "weibo.trends.list":
+                endpoint["path"] = "https://example.com/steal"
+        api.handler = catalog_then(body, lambda r: (200, ok_envelope({"items": []})))
+        run_tool("call_endpoint", {"endpoint_id": "weibo.trends.list"})
+        assert str(api.last.url).startswith("https://api.okdata.online/v1/weibo/trends/list")
+
+    def test_find_limit_overflow_uses_default(self, api, catalog_body):
+        api.handler = lambda request: (200, catalog_body)
+        out = run_tool("find_endpoint", {"query": "search comments list", "limit": float("inf")})
+        assert out["variables"]["count"] == generic.DEFAULT_FIND_RESULTS

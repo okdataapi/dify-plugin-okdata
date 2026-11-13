@@ -152,3 +152,31 @@ class TestRequest:
         with pytest.raises(client.OkdataError) as err:
             client.request("GET", "/v1/a", api_key=TEST_KEY)
         assert err.value.code == "bad_response"
+
+
+class TestHardening:
+    @pytest.mark.parametrize(
+        ("method", "path"),
+        [("GET", "https://example.com/v1/a"), ("GET", "//example.com/v1/a"), ("GET", "/v1/../internal"), ("DELETE", "/v1/a"), ("GET", "/internal/x")],
+    )
+    def test_refuses_anything_but_okdata_api_paths(self, api, method, path):
+        with pytest.raises(client.OkdataError) as err:
+            client.request(method, path, api_key=TEST_KEY)
+        assert err.value.code == "invalid_request"
+        assert api.requests == []
+
+    def test_billing_unknown_when_answer_lacks_the_field(self, api):
+        api.handler = lambda request: (502, {"message": "Bad gateway"})
+        with pytest.raises(client.OkdataError) as err:
+            client.request("GET", "/v1/a", api_key=TEST_KEY)
+        assert err.value.billed is None
+
+    @pytest.mark.parametrize("wait", [-1, "nan", "inf"])
+    def test_bad_retry_after_falls_back_to_default(self, api, wait):
+        answers = iter([(503, error_body("upstream_busy", "Busy", retry="yes", retry_after_seconds=wait)), (200, ok_envelope({"items": []}))])
+        api.handler = lambda request: next(answers)
+        assert client.request("GET", "/v1/a", api_key=TEST_KEY)["code"] == "ok"
+
+    def test_bad_endpoint_id(self):
+        with pytest.raises(client.OkdataError):
+            client.endpoint_path("../account")

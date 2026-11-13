@@ -150,8 +150,8 @@ def variables(envelope: Mapping[str, Any]) -> dict[str, Any]:
     page = envelope.get("page") or {}
     billing = ((envelope.get("meta") or {}).get("billing")) or {}
     out: dict[str, Any] = {
-        "cost": str(billing.get("amount") if billing.get("amount") is not None else "0"),
-        "balance_after": str(billing.get("balance_after") or ""),
+        "cost": "" if billing.get("amount") is None else str(billing["amount"]),
+        "balance_after": "" if billing.get("balance_after") is None else str(billing["balance_after"]),
         "request_id": str(envelope.get("request_id") or ""),
         "result_status": str((envelope.get("meta") or {}).get("result_status") or ""),
     }
