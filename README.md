@@ -1,6 +1,6 @@
 # okdata Social Data for Dify
 
-Social media data for Dify workflows and agents. Search TikTok, RedNote (Xiaohongshu), Douyin, WeChat, X and YouTube; read comments, the Douyin and Weibo hot search lists, WeChat article reads and likes, and video transcripts. One [okdata](https://okdata.online/?src=dify-plugin) API key covers 200+ endpoints on 17 platforms, billed per call. Failed calls are free, and you need no platform accounts, cookies or QR logins.
+Social media data for Dify workflows and agents. Search TikTok, RedNote (Xiaohongshu), Douyin, WeChat, X and YouTube; read comments, the Douyin and Weibo hot search lists, WeChat article reads and likes, and video transcripts. One [okdata](https://okdata.online/?src=dify-plugin) API key covers 200+ endpoints on 17 platforms, billed per call. You need no platform accounts, cookies or QR logins.
 
 - Source repository: https://github.com/okdataapi/dify-plugin-okdata
 - Simplified Chinese README: [readme/README_zh_Hans.md](readme/README_zh_Hans.md)
@@ -44,11 +44,11 @@ What is trending on Weibo and Douyin right now? Pick three topics a coffee brand
 could post about, and find two recent RedNote notes for each. Say what the calls cost.
 ```
 
-**Cost control.** Every paid tool has a **Max price per call** setting, a little above the endpoint's current price (Call Any okdata Endpoint: $0.10). okdata refuses any call that could cost more, before it runs, and bills nothing for it. It is a setting, not an agent input, so an agent cannot raise its own cap. Failed calls and timeouts cost nothing.
+**Cost control.** Every paid tool has a **Max price per call** setting, a little above the endpoint's current price (Call Any okdata Endpoint: $0.10). okdata refuses any call that could cost more, before it runs, and bills nothing for it. It is a setting, not an agent input, so an agent cannot raise its own cap. A call that reaches the data source is billed even when it comes back empty, not found, failed or timed out; calls stopped before that, such as bad parameters or a low balance, cost nothing.
 
 ## Connection requirements
 
-The plugin connects only to `https://api.okdata.online` over HTTPS. A self-hosted Dify needs outbound access to that host. Each request times out after 60 seconds and is retried at most once, with the same idempotency key, so a retry is never billed twice.
+The plugin connects only to `https://api.okdata.online` over HTTPS. A self-hosted Dify needs outbound access to that host. Each request times out after 60 seconds. A request that cannot connect is retried once, and so is a call okdata says can be retried after a short wait. A retry after the data source failed is a new call and is billed again if it reaches the data source.
 
 ## Errors
 

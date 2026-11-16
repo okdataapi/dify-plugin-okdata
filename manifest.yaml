@@ -1,4 +1,4 @@
-version: 0.1.0
+version: 0.1.1
 type: plugin
 author: okdata
 name: okdata
@@ -6,8 +6,8 @@ label:
   en_US: okdata Social Data
   zh_Hans: okdata 社媒数据
 description:
-  en_US: "Social media data for workflows and agents: TikTok, RedNote (Xiaohongshu), Douyin, WeChat Official Accounts, Weibo, X, YouTube and 10 more platforms. Search posts, read comments, hot lists, article reads and transcripts with one okdata API key, billed per call; failed calls are free."
-  zh_Hans: "给工作流和智能体用的社媒数据：抖音、小红书、公众号、视频号、微博、B站、快手、TikTok、X、YouTube 等 17 个平台。搜笔记和视频、拉评论、看热搜、查公众号阅读数、取字幕，一个 okdata Key 按次计费，失败不扣费。"
+  en_US: "Social media data for workflows and agents: TikTok, RedNote (Xiaohongshu), Douyin, WeChat Official Accounts, Weibo, X, YouTube and 10 more platforms. Search posts, read comments, hot lists, article reads and transcripts with one okdata API key, billed per call."
+  zh_Hans: "给工作流和智能体用的社媒数据：抖音、小红书、公众号、视频号、微博、B站、快手、TikTok、X、YouTube 等 17 个平台。搜笔记和视频、拉评论、看热搜、查公众号阅读数、取字幕，一个 okdata Key 按次计费。"
 icon: icon.svg
 tags:
   - social
