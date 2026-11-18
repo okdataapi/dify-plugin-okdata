@@ -208,6 +208,18 @@
      "en": "Public channels and their messages.",
      "zh": "公开频道和频道消息。"
     }
+   },
+   {
+    "id": "amazon",
+    "name": {
+     "en": "Amazon",
+     "zh": "亚马逊"
+    },
+    "region": "global",
+    "summary": {
+     "en": "Product search, details, reviews and Best Sellers lists, in 22 Amazon stores.",
+     "zh": "22 个国家站点的商品搜索、详情、评论和畅销榜。"
+    }
    }
   ],
   "endpoints": [
@@ -1439,130 +1451,6 @@
     "chargeWhenEmpty": "0.002",
     "chargeWhenNotFound": "0",
     "short": {
-     "en": "Reddit post comments",
-     "zh": "Reddit 帖子评论"
-    },
-    "group": null,
-    "aliases": {
-     "en": [],
-     "zh": []
-    },
-    "category": "social",
-    "role": null,
-    "oneOf": [
-     [
-      "id",
-      "url"
-     ]
-    ],
-    "cursorTtlSeconds": 86400,
-    "snapshotSeconds": null,
-    "paused": false,
-    "id": "reddit.posts.comments.list",
-    "platform": "reddit",
-    "object": "comment",
-    "list": true,
-    "pageSize": 10,
-    "unit": "call",
-    "price": "0.002",
-    "title": {
-     "en": "Reddit post comments",
-     "zh": "Reddit 帖子评论"
-    },
-    "summary": {
-     "en": "Comments on a post with the first levels of replies (parent_id says which comment a reply answers): text, commenter, score and reply count. Reddit's default order, newest or top score first.",
-     "zh": "帖子下的评论，连同前几层回复（parent_id 表示回复的是哪条）：内容、评论者、得分和回复数。按 Reddit 默认顺序、最新或最高分排。"
-    },
-    "params": [
-     {
-      "name": "id",
-      "type": "string",
-      "required": false,
-      "example": "t3_1nnrvkr",
-      "description": {
-       "en": "The post ID, with or without the t3_ prefix. Give id or url.",
-       "zh": "帖子 ID，带不带 t3_ 前缀都行。id 和 url 二选一。"
-      }
-     },
-     {
-      "name": "url",
-      "type": "string",
-      "required": false,
-      "example": "https://www.reddit.com/r/nasa/comments/1nnrvkr/",
-      "description": {
-       "en": "A share link or page URL; the ID is read from it.",
-       "zh": "分享链接或网页地址，会从中解析出 ID。"
-      }
-     },
-     {
-      "name": "sort",
-      "type": "string",
-      "required": false,
-      "enum": [
-       "best",
-       "latest",
-       "popular"
-      ],
-      "default": "best",
-      "description": {
-       "en": "Result order.",
-       "zh": "排序方式。"
-      }
-     },
-     {
-      "name": "cursor",
-      "type": "string",
-      "required": false,
-      "description": {
-       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
-       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
-      }
-     },
-     {
-      "name": "view",
-      "type": "string",
-      "required": false,
-      "enum": [
-       "compact",
-       "standard",
-       "full"
-      ],
-      "default": "standard",
-      "description": {
-       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
-       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
-      }
-     },
-     {
-      "name": "fields",
-      "type": "string[]",
-      "required": false,
-      "example": [
-       "id",
-       "text",
-       "metrics.likes"
-      ],
-      "description": {
-       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
-       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
-      }
-     }
-    ],
-    "jobs": [
-     "word-of-mouth"
-    ],
-    "path": "/v1/reddit/posts/comments/list"
-   },
-   {
-    "method": "GET",
-    "post": false,
-    "batchMax": null,
-    "status": "preview",
-    "maxCharge": "0.002",
-    "minimum": null,
-    "chargeWhenEmpty": "0.002",
-    "chargeWhenNotFound": "0",
-    "short": {
      "en": "Kuaishou video comments",
      "zh": "快手作品评论"
     },
@@ -1899,6 +1787,1267 @@
      "content-research"
     ],
     "path": "/v1/wechat_mp/articles/metrics"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.004",
+    "minimum": null,
+    "chargeWhenEmpty": "0.004",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "YouTube video search",
+     "zh": "YouTube 视频搜索"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "youtube.videos.search",
+    "platform": "youtube",
+    "object": "post",
+    "list": true,
+    "pageSize": 20,
+    "unit": "call",
+    "price": "0.004",
+    "title": {
+     "en": "YouTube video search",
+     "zh": "YouTube 视频搜索"
+    },
+    "summary": {
+     "en": "Videos matching keywords with views, length and channel.",
+     "zh": "按关键词搜视频，带播放量、时长和频道。"
+    },
+    "params": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "example": "claude code tutorial",
+      "description": {
+       "en": "Keywords, as a person would type them into the platform search box.",
+       "zh": "关键词，和在平台搜索框里输入的一样。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "relevance",
+       "latest",
+       "most_viewed"
+      ],
+      "default": "relevance",
+      "description": {
+       "en": "Result order.",
+       "zh": "排序方式。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "content-research"
+    ],
+    "path": "/v1/youtube/videos/search"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.002",
+    "minimum": null,
+    "chargeWhenEmpty": "0.002",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "YouTube video comments",
+     "zh": "YouTube 视频评论"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "youtube.videos.comments.list",
+    "platform": "youtube",
+    "object": "comment",
+    "list": true,
+    "pageSize": 20,
+    "unit": "call",
+    "price": "0.002",
+    "title": {
+     "en": "YouTube video comments",
+     "zh": "YouTube 视频评论"
+    },
+    "summary": {
+     "en": "Comments on a video, top or newest first.",
+     "zh": "视频评论，按热门或最新。"
+    },
+    "params": [
+     {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "example": "dQw4w9WgXcQ",
+      "description": {
+       "en": "The video ID.",
+       "zh": "视频 ID。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "top",
+       "latest"
+      ],
+      "default": "top",
+      "description": {
+       "en": "Result order.",
+       "zh": "排序方式。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth"
+    ],
+    "path": "/v1/youtube/videos/comments/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.002",
+    "minimum": null,
+    "chargeWhenEmpty": "0.002",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "TikTok video comments",
+     "zh": "TikTok 视频评论"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "tiktok.videos.comments.list",
+    "platform": "tiktok",
+    "object": "comment",
+    "list": true,
+    "pageSize": 50,
+    "unit": "call",
+    "price": "0.002",
+    "title": {
+     "en": "TikTok video comments",
+     "zh": "TikTok 视频评论"
+    },
+    "summary": {
+     "en": "Comments on a video with likes and reply counts.",
+     "zh": "视频评论，带点赞和回复数。"
+    },
+    "params": [
+     {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "example": "7305085486984858894",
+      "description": {
+       "en": "The video ID.",
+       "zh": "视频 ID。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth"
+    ],
+    "path": "/v1/tiktok/videos/comments/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.004",
+    "minimum": null,
+    "chargeWhenEmpty": "0",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Instagram account profile",
+     "zh": "Instagram 账号信息"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": null,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "instagram.users.get",
+    "platform": "instagram",
+    "object": "account",
+    "list": false,
+    "unit": "call",
+    "price": "0.004",
+    "title": {
+     "en": "Instagram account profile",
+     "zh": "Instagram 账号信息"
+    },
+    "summary": {
+     "en": "An Instagram account by handle: name, bio, followers, following, post count, verification, whether it is private, and the website and links the profile gives.",
+     "zh": "按用户名取 Instagram 账号：名称、简介、粉丝数、关注数、帖子数、认证、是否私密，以及主页上的网站和链接。"
+    },
+    "params": [
+     {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "example": "nasa",
+      "description": {
+       "en": "The handle, with or without @.",
+       "zh": "用户名，带不带 @ 都行。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "creator-discovery",
+     "competitor-monitoring"
+    ],
+    "path": "/v1/instagram/users/get"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.004",
+    "minimum": null,
+    "chargeWhenEmpty": "0.004",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Instagram account posts",
+     "zh": "Instagram 账号帖子"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "instagram.users.posts.list",
+    "platform": "instagram",
+    "object": "post",
+    "list": true,
+    "pageSize": 12,
+    "unit": "call",
+    "price": "0.004",
+    "title": {
+     "en": "Instagram account posts",
+     "zh": "Instagram 账号帖子"
+    },
+    "summary": {
+     "en": "An account's posts, newest first, 12 a page, or its reels only: caption, likes, comments, plays, time posted, images and the other authors of a collab post.",
+     "zh": "账号发布的帖子，从新到旧，每页 12 条，也可以只要 Reels：文案、点赞、评论、播放、发布时间、图片，以及合拍帖的其他作者。"
+    },
+    "params": [
+     {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "example": "nasa",
+      "description": {
+       "en": "The handle, with or without @.",
+       "zh": "用户名，带不带 @ 都行。"
+      }
+     },
+     {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "all",
+       "reel"
+      ],
+      "default": "all",
+      "description": {
+       "en": "All posts (the default), or reels only.",
+       "zh": "全部帖子（默认），或只要 Reels。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "competitor-monitoring",
+     "content-research"
+    ],
+    "path": "/v1/instagram/users/posts/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.004",
+    "minimum": null,
+    "chargeWhenEmpty": "0.004",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Instagram post comments",
+     "zh": "Instagram 帖子评论"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [
+     [
+      "id",
+      "url"
+     ]
+    ],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "instagram.posts.comments.list",
+    "platform": "instagram",
+    "object": "comment",
+    "list": true,
+    "pageSize": 15,
+    "unit": "call",
+    "price": "0.004",
+    "title": {
+     "en": "Instagram post comments",
+     "zh": "Instagram 帖子评论"
+    },
+    "summary": {
+     "en": "Comments on a post or reel, newest first, about 15 a page: text, commenter, likes and time posted.",
+     "zh": "帖子或 Reel 下的评论，从新到旧，每页约 15 条：内容、评论者、点赞和发布时间。"
+    },
+    "params": [
+     {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "example": "DeCPVhERA8e",
+      "description": {
+       "en": "The shortcode: what follows /p/ or /reel/ in the link. Give id or url.",
+       "zh": "帖子短码：链接里 /p/ 或 /reel/ 后面那一段。id 和 url 二选一。"
+      }
+     },
+     {
+      "name": "url",
+      "type": "string",
+      "required": false,
+      "example": "https://www.instagram.com/p/DeCPVhERA8e/",
+      "description": {
+       "en": "A share link or page URL; the ID is read from it.",
+       "zh": "分享链接或网页地址，会从中解析出 ID。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth"
+    ],
+    "path": "/v1/instagram/posts/comments/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.004",
+    "minimum": null,
+    "chargeWhenEmpty": "0.004",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Reddit post search",
+     "zh": "Reddit 帖子搜索"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "reddit.posts.search",
+    "platform": "reddit",
+    "object": "post",
+    "list": true,
+    "pageSize": 25,
+    "unit": "call",
+    "price": "0.004",
+    "title": {
+     "en": "Reddit post search",
+     "zh": "Reddit 帖子搜索"
+    },
+    "summary": {
+     "en": "Posts matching keywords across Reddit, by relevance, newest or top score, optionally within a period: title, text, author, community, score and comment count.",
+     "zh": "在全站按关键词搜帖子，可按相关、最新或最高分排，可限定发布时间：标题、正文、作者、社区、得分和评论数。"
+    },
+    "params": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "example": "saturn rings",
+      "description": {
+       "en": "Keywords, as a person would type them into the platform search box.",
+       "zh": "关键词，和在平台搜索框里输入的一样。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "relevance",
+       "latest",
+       "popular"
+      ],
+      "default": "relevance",
+      "description": {
+       "en": "Result order.",
+       "zh": "排序方式。"
+      }
+     },
+     {
+      "name": "published_within",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": {
+       "en": "Only posts from the last day, week, month or year.",
+       "zh": "只要最近一天、一周、一个月或一年内的帖子。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth",
+     "content-research"
+    ],
+    "path": "/v1/reddit/posts/search"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.002",
+    "minimum": null,
+    "chargeWhenEmpty": "0.002",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Reddit post comments",
+     "zh": "Reddit 帖子评论"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [
+     [
+      "id",
+      "url"
+     ]
+    ],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "reddit.posts.comments.list",
+    "platform": "reddit",
+    "object": "comment",
+    "list": true,
+    "pageSize": 10,
+    "unit": "call",
+    "price": "0.002",
+    "title": {
+     "en": "Reddit post comments",
+     "zh": "Reddit 帖子评论"
+    },
+    "summary": {
+     "en": "Comments on a post with the first levels of replies (parent_id says which comment a reply answers): text, commenter, score and reply count. Reddit's default order, newest or top score first.",
+     "zh": "帖子下的评论，连同前几层回复（parent_id 表示回复的是哪条）：内容、评论者、得分和回复数。按 Reddit 默认顺序、最新或最高分排。"
+    },
+    "params": [
+     {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "example": "t3_1nnrvkr",
+      "description": {
+       "en": "The post ID, with or without the t3_ prefix. Give id or url.",
+       "zh": "帖子 ID，带不带 t3_ 前缀都行。id 和 url 二选一。"
+      }
+     },
+     {
+      "name": "url",
+      "type": "string",
+      "required": false,
+      "example": "https://www.reddit.com/r/nasa/comments/1nnrvkr/",
+      "description": {
+       "en": "A share link or page URL; the ID is read from it.",
+       "zh": "分享链接或网页地址，会从中解析出 ID。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "best",
+       "latest",
+       "popular"
+      ],
+      "default": "best",
+      "description": {
+       "en": "Result order.",
+       "zh": "排序方式。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth"
+    ],
+    "path": "/v1/reddit/posts/comments/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.006",
+    "minimum": null,
+    "chargeWhenEmpty": "0.006",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Amazon product search",
+     "zh": "亚马逊商品搜索"
+    },
+    "group": null,
+    "aliases": {
+     "en": [
+      "amazon search api",
+      "amazon product data",
+      "asin lookup by keyword"
+     ],
+     "zh": [
+      "亚马逊搜索",
+      "亚马逊选品",
+      "亚马逊数据"
+     ]
+    },
+    "category": "commerce",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "amazon.products.search",
+    "platform": "amazon",
+    "object": "product",
+    "list": true,
+    "pageSize": 48,
+    "unit": "call",
+    "price": "0.006",
+    "title": {
+     "en": "Amazon product search",
+     "zh": "亚马逊商品搜索"
+    },
+    "summary": {
+     "en": "Search an Amazon store by keyword, as a shopper sees the results: title, price and list price, star rating, number of ratings, units bought last month, Prime, Best Seller and Amazon's Choice badges, and the photo.",
+     "zh": "按关键词搜亚马逊商品，和买家看到的结果一致：标题、售价和原价、星级、评分数、上月购买量、Prime、Best Seller 和 Amazon's Choice 标记，以及主图。"
+    },
+    "params": [
+     {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "example": "portable espresso maker",
+      "description": {
+       "en": "Keywords, as a person would type them into the platform search box.",
+       "zh": "关键词，和在平台搜索框里输入的一样。"
+      }
+     },
+     {
+      "name": "country",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "US",
+       "GB",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "PL",
+       "SE",
+       "CA",
+       "MX",
+       "BR",
+       "AU",
+       "JP",
+       "IN",
+       "SG",
+       "AE",
+       "SA",
+       "TR",
+       "EG",
+       "CN"
+      ],
+      "default": "US",
+      "description": {
+       "en": "The Amazon store, by country: US (amazon.com, the default), GB (amazon.co.uk), DE, JP and others. Prices come in that store's currency.",
+       "zh": "哪个国家的亚马逊站：US（amazon.com，默认）、GB（英国站）、DE、JP 等。价格是该站点的币种。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "relevance",
+       "best_sellers",
+       "reviews",
+       "newest",
+       "lowest_price",
+       "highest_price"
+      ],
+      "default": "relevance",
+      "description": {
+       "en": "Amazon's order: relevance (the default), most reviewed, newest, or by price. best_sellers keeps the search words: the matching products, the most bought last month first (Amazon's own Best Sellers sort drops the words; for a category's Best Sellers list use amazon.bestsellers.list).",
+       "zh": "亚马逊的排序：相关度（默认）、评论最多、最新，或按价格。best_sellers 仍按关键词搜：在匹配的商品里，上月购买量高的排前面（亚马逊自带的畅销排序会忽略关键词；要看某个品类的畅销榜，用 amazon.bestsellers.list）。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "product-research",
+     "competitor-monitoring"
+    ],
+    "path": "/v1/amazon/products/search"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.006",
+    "minimum": null,
+    "chargeWhenEmpty": "0.006",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "Amazon product reviews",
+     "zh": "亚马逊商品评论"
+    },
+    "group": null,
+    "aliases": {
+     "en": [
+      "amazon reviews api",
+      "amazon review scraper"
+     ],
+     "zh": [
+      "亚马逊评论",
+      "亚马逊差评分析"
+     ]
+    },
+    "category": "commerce",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": null,
+    "paused": false,
+    "id": "amazon.products.reviews.list",
+    "platform": "amazon",
+    "object": "review",
+    "list": true,
+    "pageSize": 10,
+    "unit": "call",
+    "price": "0.006",
+    "title": {
+     "en": "Amazon product reviews",
+     "zh": "亚马逊商品评论"
+    },
+    "summary": {
+     "en": "Customer reviews of an Amazon product: stars, title and text, date, the variant bought, photos, helpful votes and whether the purchase is verified.",
+     "zh": "亚马逊商品的买家评论：星级、标题和正文、日期、购买的款式、晒图、\"有用\"票数，以及是否为已验证购买。"
+    },
+    "params": [
+     {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "example": "B0GTS6KPPB",
+      "description": {
+       "en": "The ASIN: the 10-character product ID after /dp/ in an Amazon link.",
+       "zh": "ASIN：亚马逊商品链接里 /dp/ 后面那 10 位商品编号。"
+      }
+     },
+     {
+      "name": "country",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "US",
+       "GB",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "PL",
+       "SE",
+       "CA",
+       "MX",
+       "BR",
+       "AU",
+       "JP",
+       "IN",
+       "SG",
+       "AE",
+       "SA",
+       "TR",
+       "EG",
+       "CN"
+      ],
+      "default": "US",
+      "description": {
+       "en": "The Amazon store, by country: US (amazon.com, the default), GB (amazon.co.uk), DE, JP and others. Prices come in that store's currency.",
+       "zh": "哪个国家的亚马逊站：US（amazon.com，默认）、GB（英国站）、DE、JP 等。价格是该站点的币种。"
+      }
+     },
+     {
+      "name": "sort",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "top",
+       "recent"
+      ],
+      "default": "top",
+      "description": {
+       "en": "Most helpful first (the default) or newest first. Amazon now shows signed-out visitors one fixed set: the up to 10 reviews on the product page, and it ignores the order asked for (checked 2026-11-18: top and recent gave the same 10), so one call gets all there is and a second order adds nothing. There is no next page and no star filter; for critical reviews, keep ratings of 3 or less from that set.",
+       "zh": "最有帮助的在前（默认），或最新的在前。亚马逊现在对未登录访客只给固定的一批：商品页上的最多 10 条评论，并且不理会排序（2026-11-18 实测：top 和 recent 返回同样的 10 条），所以调一次就拿全了，换排序再调不会多拿到评论。没有下一页，也没有按星级筛；想看差评，就从这批里留下 3 星及以下的。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "word-of-mouth",
+     "product-research"
+    ],
+    "path": "/v1/amazon/products/reviews/list"
+   },
+   {
+    "method": "GET",
+    "post": false,
+    "batchMax": null,
+    "status": "preview",
+    "maxCharge": "0.009",
+    "minimum": null,
+    "chargeWhenEmpty": "0.009",
+    "chargeWhenNotFound": "0",
+    "short": {
+     "en": "X trending topics",
+     "zh": "X 趋势"
+    },
+    "group": null,
+    "aliases": {
+     "en": [],
+     "zh": []
+    },
+    "category": "social",
+    "role": null,
+    "oneOf": [],
+    "cursorTtlSeconds": 86400,
+    "snapshotSeconds": 600,
+    "paused": false,
+    "id": "x.trends.list",
+    "platform": "x",
+    "object": "trend",
+    "list": true,
+    "pageSize": 30,
+    "unit": "call",
+    "price": "0.009",
+    "title": {
+     "en": "X trending topics",
+     "zh": "X 趋势"
+    },
+    "summary": {
+     "en": "Trending topics worldwide or for one country.",
+     "zh": "全球或某个国家的趋势话题。"
+    },
+    "params": [
+     {
+      "name": "country",
+      "type": "string",
+      "required": false,
+      "example": "US",
+      "description": {
+       "en": "ISO country code; worldwide when omitted.",
+       "zh": "国家代码（ISO），不填为全球。"
+      }
+     },
+     {
+      "name": "cursor",
+      "type": "string",
+      "required": false,
+      "description": {
+       "en": "Opaque cursor from page.next_cursor of the previous call. Each page is a separate call.",
+       "zh": "上一次返回的 page.next_cursor，原样传回。每翻一页都是一次单独的调用。"
+      }
+     },
+     {
+      "name": "view",
+      "type": "string",
+      "required": false,
+      "enum": [
+       "compact",
+       "standard",
+       "full"
+      ],
+      "default": "standard",
+      "description": {
+       "en": "How much of each object comes back. full adds platform-specific fields under ext.",
+       "zh": "返回多少字段。full 会在 ext 里带上平台特有字段。"
+      }
+     },
+     {
+      "name": "fields",
+      "type": "string[]",
+      "required": false,
+      "example": [
+       "id",
+       "text",
+       "metrics.likes"
+      ],
+      "description": {
+       "en": "Fields to keep, by path (author.name), to save tokens. In a query string: comma-separated.",
+       "zh": "只保留这些字段，按路径写（如 author.name），用来省 token。放在查询参数里时用逗号分隔。"
+      }
+     }
+    ],
+    "jobs": [
+     "trend-research"
+    ],
+    "path": "/v1/x/trends/list"
    }
   ]
  },

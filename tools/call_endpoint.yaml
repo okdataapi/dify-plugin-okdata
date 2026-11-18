@@ -6,9 +6,9 @@ identity:
     zh_Hans: 调用任意 okdata 接口
 description:
   human:
-    en_US: Call any of okdata's 200+ endpoints by its id, such as kuaishou.videos.search or instagram.users.get, with parameters as JSON. Billed per call at the endpoint's price.
-    zh_Hans: 按接口 ID 调用 okdata 的任意接口（如 kuaishou.videos.search、bilibili.trends.list），参数用 JSON 传。按该接口的价格按次计费。
-  llm: 'Call any okdata endpoint by id with its parameters. Look up the id and the parameters first with the free Find an okdata Endpoint tool. Paging: pass next_cursor from the previous result as params.cursor. Billed per call at the endpoint''s price; calls above the configured price cap are refused and cost nothing.'
+    en_US: Call any of okdata's 230+ endpoints by its id, such as aliexpress.products.search, telegram.channels.messages.list or kuaishou.videos.search, with parameters as JSON. Billed per call at the endpoint's price.
+    zh_Hans: 按接口 ID 调用 okdata 的 230 多个接口中的任意一个（如 bilibili.trends.list、kuaishou.videos.search），参数用 JSON 传。按该接口的价格按次计费。
+  llm: 'Call any okdata endpoint by id with its parameters. Look up the id and the parameters first with the free Find an okdata Endpoint tool. Paging: pass next_cursor from the previous result as params.cursor. Billed per call at the endpoint''s price; a call that could cost more than the configured price cap is refused before it runs.'
 parameters:
 - name: endpoint_id
   type: string
@@ -74,8 +74,8 @@ parameters:
     en_US: Max price per call (USD)
     zh_Hans: 单次调用最高价格（美元）
   human_description:
-    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
-    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
 output_schema:
   type: object
   properties:

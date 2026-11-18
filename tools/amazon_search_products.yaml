@@ -1,0 +1,217 @@
+identity:
+  name: amazon_search_products
+  author: okdata
+  label:
+    en_US: Amazon Product Search
+    zh_Hans: 亚马逊商品搜索
+description:
+  human:
+    en_US: 'Search an Amazon store by keywords, as a shopper sees the results: title, price and list price, stars, number of ratings, units bought last month, Prime and Best Seller badges, and the photo. About 48 products per call.'
+    zh_Hans: 按关键词搜亚马逊商品，和买家看到的结果一致：标题、售价和原价、星级、评分数、上月购买量、Prime 和 Best Seller 标记，以及主图。每次调用约 48 个商品。
+  llm: Search Amazon products by keywords in one country store. Returns about 48 products per page with the ASIN as id, title, price, list price, currency, star rating, number of ratings, units bought last month, badges and image. Pass a product's id to Amazon Product Reviews for its reviews. Billed per call.
+parameters:
+- name: query
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Keywords
+    zh_Hans: 关键词
+  human_description:
+    en_US: Search words, as typed into Amazon's search box.
+    zh_Hans: 搜索词，和在亚马逊搜索框里输入的一样。
+  llm_description: Keywords to search the Amazon store for, as a shopper would type them.
+  placeholder:
+    en_US: portable espresso maker
+    zh_Hans: portable espresso maker
+- name: country
+  type: select
+  required: false
+  form: llm
+  default: US
+  label:
+    en_US: Amazon store
+    zh_Hans: 亚马逊站点
+  human_description:
+    en_US: Which country's Amazon store. Prices come in that store's currency.
+    zh_Hans: 哪个国家的亚马逊站。价格是该站点的币种。
+  llm_description: 'Country code of the Amazon store: US (default, amazon.com), GB, DE, FR, IT, ES, NL, BE, PL, SE, CA, MX, BR, AU, JP, IN, SG, AE, SA, TR, EG or CN. Prices come in that store''s currency.'
+  options:
+  - value: US
+    label:
+      en_US: United States (US)
+      zh_Hans: 美国
+  - value: GB
+    label:
+      en_US: United Kingdom (GB)
+      zh_Hans: 英国
+  - value: DE
+    label:
+      en_US: Germany (DE)
+      zh_Hans: 德国
+  - value: FR
+    label:
+      en_US: France (FR)
+      zh_Hans: 法国
+  - value: IT
+    label:
+      en_US: Italy (IT)
+      zh_Hans: 意大利
+  - value: ES
+    label:
+      en_US: Spain (ES)
+      zh_Hans: 西班牙
+  - value: NL
+    label:
+      en_US: Netherlands (NL)
+      zh_Hans: 荷兰
+  - value: BE
+    label:
+      en_US: Belgium (BE)
+      zh_Hans: 比利时
+  - value: PL
+    label:
+      en_US: Poland (PL)
+      zh_Hans: 波兰
+  - value: SE
+    label:
+      en_US: Sweden (SE)
+      zh_Hans: 瑞典
+  - value: CA
+    label:
+      en_US: Canada (CA)
+      zh_Hans: 加拿大
+  - value: MX
+    label:
+      en_US: Mexico (MX)
+      zh_Hans: 墨西哥
+  - value: BR
+    label:
+      en_US: Brazil (BR)
+      zh_Hans: 巴西
+  - value: AU
+    label:
+      en_US: Australia (AU)
+      zh_Hans: 澳大利亚
+  - value: JP
+    label:
+      en_US: Japan (JP)
+      zh_Hans: 日本
+  - value: IN
+    label:
+      en_US: India (IN)
+      zh_Hans: 印度
+  - value: SG
+    label:
+      en_US: Singapore (SG)
+      zh_Hans: 新加坡
+  - value: AE
+    label:
+      en_US: United Arab Emirates (AE)
+      zh_Hans: 阿联酋
+  - value: SA
+    label:
+      en_US: Saudi Arabia (SA)
+      zh_Hans: 沙特阿拉伯
+  - value: TR
+    label:
+      en_US: Türkiye (TR)
+      zh_Hans: 土耳其
+  - value: EG
+    label:
+      en_US: Egypt (EG)
+      zh_Hans: 埃及
+  - value: CN
+    label:
+      en_US: China (CN)
+      zh_Hans: 中国
+- name: sort
+  type: select
+  required: false
+  form: llm
+  default: relevance
+  label:
+    en_US: Order
+    zh_Hans: 排序
+  human_description:
+    en_US: Result order, as Amazon sorts it.
+    zh_Hans: 结果排序，和亚马逊的排序一致。
+  llm_description: relevance (default), best_sellers (the matching products, most bought last month first), reviews (most reviewed), newest, lowest_price or highest_price.
+  options:
+  - value: relevance
+    label:
+      en_US: Most relevant
+      zh_Hans: 综合
+  - value: best_sellers
+    label:
+      en_US: Best sellers (bought last month)
+      zh_Hans: 畅销（上月购买量）
+  - value: reviews
+    label:
+      en_US: Most reviewed
+      zh_Hans: 评论最多
+  - value: newest
+    label:
+      en_US: Newest
+      zh_Hans: 最新上架
+  - value: lowest_price
+    label:
+      en_US: 'Price: low to high'
+      zh_Hans: 价格从低到高
+  - value: highest_price
+    label:
+      en_US: 'Price: high to low'
+      zh_Hans: 价格从高到低
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.02
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/amazon_search_products.py

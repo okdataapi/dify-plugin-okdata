@@ -7,7 +7,9 @@ to get the next page. The full envelope always goes out as JSON next to it.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
+from decimal import Decimal
 from typing import Any
 
 MAX_LINES = 30
@@ -51,6 +53,23 @@ def _author_name(item: Mapping[str, Any]) -> str:
     return str(author.get("name") or author.get("username") or "")
 
 
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def _shop_details(item: Mapping[str, Any]) -> list[str]:
+    """Price, stars and number of ratings, for products and reviews."""
+    details = []
+    if _is_number(item.get("price")):
+        price = format(Decimal(str(item["price"])).normalize(), "f")
+        details.append(f"{item.get('currency') or ''} {price}".strip())
+    if _is_number(item.get("rating")):
+        details.append(f"{item['rating']:g} stars")
+    if _is_number(item.get("reviews")):
+        details.append(f"{_compact_number(item['reviews'])} ratings")
+    return details
+
+
 def _describe_item(item: Any) -> str:
     if not isinstance(item, Mapping):
         return _snippet(item)
@@ -60,6 +79,7 @@ def _describe_item(item: Any) -> str:
         return f"{_snippet(item['name'])}{heat}{url}"
     head = item.get("title") or item.get("text") or item.get("name") or item.get("id") or ""
     details = [d for d in (_author_name(item), _metrics_text(item.get("metrics"))) if d]
+    details.extend(_shop_details(item))
     if item.get("likes") is not None and "metrics" not in item:
         details.append(f"{_compact_number(item['likes'])} likes")
     if item.get("replies") is not None:

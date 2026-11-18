@@ -1,0 +1,100 @@
+identity:
+  name: youtube_video_comments
+  author: okdata
+  label:
+    en_US: YouTube Video Comments
+    zh_Hans: YouTube 视频评论
+description:
+  human:
+    en_US: Comments on a YouTube video, top or newest first. About 20 comments per call. Accepts a video ID or link.
+    zh_Hans: YouTube 视频下的评论，按热门或最新排。每次调用约 20 条。可以填视频 ID 或链接。
+  llm: List comments on a YouTube video, top (default) or newest first. Input the 11-character video id or any YouTube link (watch, youtu.be, shorts). Returns about 20 comments per page with text and author. Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Video ID or link
+    zh_Hans: 视频 ID 或链接
+  human_description:
+    en_US: The 11-character video ID, or a youtube.com / youtu.be link.
+    zh_Hans: 11 位视频 ID，或 youtube.com / youtu.be 链接。
+  llm_description: The YouTube video id (11 characters, from YouTube Video Search results) or a YouTube link.
+  placeholder:
+    en_US: dQw4w9WgXcQ
+    zh_Hans: dQw4w9WgXcQ
+- name: sort
+  type: select
+  required: false
+  form: llm
+  default: top
+  label:
+    en_US: Order
+    zh_Hans: 排序
+  human_description:
+    en_US: Result order.
+    zh_Hans: 结果排序。
+  llm_description: top (default) or latest.
+  options:
+  - value: top
+    label:
+      en_US: Top comments
+      zh_Hans: 热门
+  - value: latest
+    label:
+      en_US: Newest
+      zh_Hans: 最新
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/youtube_video_comments.py

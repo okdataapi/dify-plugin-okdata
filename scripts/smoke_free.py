@@ -55,6 +55,7 @@ def check_specs() -> None:
         assert endpoint is not None, f"{name}: {spec.endpoint_id} is not in the live catalog"
         api_params = {p["name"] for p in endpoint["params"]}
         assert set(spec.params) <= api_params, f"{name}: {set(spec.params) - api_params} not accepted"
+        assert set(spec.links.values()) <= api_params, f"{name}: link parameter not accepted"
         assert Decimal(endpoint["maxCharge"]) <= Decimal(spec.max_price), f"{name}: max charge above default cap"
         print(f"ok  {name:28} {spec.endpoint_id:36} ${endpoint['price']}/{endpoint['unit']} (cap ${spec.max_price})")
 

@@ -1,0 +1,169 @@
+identity:
+  name: amazon_product_reviews
+  author: okdata
+  label:
+    en_US: Amazon Product Reviews
+    zh_Hans: 亚马逊商品评论
+description:
+  human:
+    en_US: 'Customer reviews of an Amazon product: stars, title and text, date, the variant bought, photos, helpful votes and verified purchase. Up to 10 reviews per call, the ones shown on the product page.'
+    zh_Hans: 亚马逊商品的买家评论：星级、标题和正文、日期、购买的款式、晒图、“有用”票数，以及是否为已验证购买。每次调用最多 10 条，就是商品页上展示的那些。
+  llm: Get customer reviews of an Amazon product. Input the ASIN (the 10-character id after /dp/ in the link, or a product's id from Amazon Product Search) or an Amazon product link, and the store. Returns up to 10 reviews, the set shown on the product page, with stars, title and text, date, variant, photos, helpful votes and verified purchase. One call gets that whole set; there is no next page. For complaints, keep the reviews of 3 stars or less. Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: ASIN or product link
+    zh_Hans: ASIN 或商品链接
+  human_description:
+    en_US: The 10-character ASIN after /dp/ in an Amazon link, or the product link itself.
+    zh_Hans: 亚马逊商品链接里 /dp/ 后面那 10 位 ASIN，或直接填商品链接。
+  llm_description: The Amazon ASIN (10 characters, the id from Amazon Product Search results) or an Amazon product link with /dp/<ASIN>.
+  placeholder:
+    en_US: B0GTS6KPPB
+    zh_Hans: B0GTS6KPPB
+- name: country
+  type: select
+  required: false
+  form: llm
+  default: US
+  label:
+    en_US: Amazon store
+    zh_Hans: 亚马逊站点
+  human_description:
+    en_US: Which country's Amazon store. Prices come in that store's currency.
+    zh_Hans: 哪个国家的亚马逊站。价格是该站点的币种。
+  llm_description: 'Country code of the Amazon store: US (default, amazon.com), GB, DE, FR, IT, ES, NL, BE, PL, SE, CA, MX, BR, AU, JP, IN, SG, AE, SA, TR, EG or CN. Prices come in that store''s currency.'
+  options:
+  - value: US
+    label:
+      en_US: United States (US)
+      zh_Hans: 美国
+  - value: GB
+    label:
+      en_US: United Kingdom (GB)
+      zh_Hans: 英国
+  - value: DE
+    label:
+      en_US: Germany (DE)
+      zh_Hans: 德国
+  - value: FR
+    label:
+      en_US: France (FR)
+      zh_Hans: 法国
+  - value: IT
+    label:
+      en_US: Italy (IT)
+      zh_Hans: 意大利
+  - value: ES
+    label:
+      en_US: Spain (ES)
+      zh_Hans: 西班牙
+  - value: NL
+    label:
+      en_US: Netherlands (NL)
+      zh_Hans: 荷兰
+  - value: BE
+    label:
+      en_US: Belgium (BE)
+      zh_Hans: 比利时
+  - value: PL
+    label:
+      en_US: Poland (PL)
+      zh_Hans: 波兰
+  - value: SE
+    label:
+      en_US: Sweden (SE)
+      zh_Hans: 瑞典
+  - value: CA
+    label:
+      en_US: Canada (CA)
+      zh_Hans: 加拿大
+  - value: MX
+    label:
+      en_US: Mexico (MX)
+      zh_Hans: 墨西哥
+  - value: BR
+    label:
+      en_US: Brazil (BR)
+      zh_Hans: 巴西
+  - value: AU
+    label:
+      en_US: Australia (AU)
+      zh_Hans: 澳大利亚
+  - value: JP
+    label:
+      en_US: Japan (JP)
+      zh_Hans: 日本
+  - value: IN
+    label:
+      en_US: India (IN)
+      zh_Hans: 印度
+  - value: SG
+    label:
+      en_US: Singapore (SG)
+      zh_Hans: 新加坡
+  - value: AE
+    label:
+      en_US: United Arab Emirates (AE)
+      zh_Hans: 阿联酋
+  - value: SA
+    label:
+      en_US: Saudi Arabia (SA)
+      zh_Hans: 沙特阿拉伯
+  - value: TR
+    label:
+      en_US: Türkiye (TR)
+      zh_Hans: 土耳其
+  - value: EG
+    label:
+      en_US: Egypt (EG)
+      zh_Hans: 埃及
+  - value: CN
+    label:
+      en_US: China (CN)
+      zh_Hans: 中国
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.02
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/amazon_product_reviews.py

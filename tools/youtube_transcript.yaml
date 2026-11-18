@@ -46,8 +46,8 @@ parameters:
     en_US: Max price per call (USD)
     zh_Hans: 单次调用最高价格（美元）
   human_description:
-    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
-    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
 output_schema:
   type: object
   properties:

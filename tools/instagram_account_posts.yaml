@@ -1,0 +1,100 @@
+identity:
+  name: instagram_account_posts
+  author: okdata
+  label:
+    en_US: Instagram Account Posts
+    zh_Hans: Instagram 账号帖子
+description:
+  human:
+    en_US: 'An Instagram account''s posts, newest first, or only its reels: caption, likes, comments, plays and time posted. 12 posts per call.'
+    zh_Hans: Instagram 账号发布的帖子，从新到旧，也可以只要 Reels：文案、点赞、评论、播放和发布时间。每次调用 12 条。
+  llm: List an Instagram account's posts, newest first, 12 per page; set type to reel for reels only. Input the handle (with or without @). Each post comes with its link, caption, likes, comments, plays, time posted and images; pass the link to Instagram Post Comments for its comments. Billed per call.
+parameters:
+- name: username
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Handle
+    zh_Hans: 用户名
+  human_description:
+    en_US: The account's handle, with or without @, or its instagram.com profile link.
+    zh_Hans: 账号的用户名，带不带 @ 都行，也可以填 instagram.com 主页链接。
+  llm_description: The Instagram handle (with or without @) or an instagram.com/<handle> link.
+  placeholder:
+    en_US: nasa
+    zh_Hans: nasa
+- name: type
+  type: select
+  required: false
+  form: llm
+  default: all
+  label:
+    en_US: Posts
+    zh_Hans: 帖子类型
+  human_description:
+    en_US: All posts, or reels only.
+    zh_Hans: 全部帖子，或只要 Reels。
+  llm_description: all (default) or reel.
+  options:
+  - value: all
+    label:
+      en_US: All posts
+      zh_Hans: 全部帖子
+  - value: reel
+    label:
+      en_US: Reels only
+      zh_Hans: 只要 Reels
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/instagram_account_posts.py

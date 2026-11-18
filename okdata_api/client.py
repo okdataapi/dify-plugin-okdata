@@ -21,7 +21,7 @@ import httpx
 BASE_URL = "https://api.okdata.online"
 SIGNUP_URL = "https://okdata.online/signup/?src=dify-plugin"
 SOURCE_LABEL = "dify"
-USER_AGENT = "okdata-dify-plugin/0.1.0"
+USER_AGENT = "okdata-dify-plugin/0.2.0"
 KEY_PREFIX = "okd_"
 CREDENTIAL_NAME = "okdata_api_key"
 

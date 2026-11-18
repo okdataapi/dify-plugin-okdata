@@ -1,0 +1,104 @@
+identity:
+  name: reddit_post_comments
+  author: okdata
+  label:
+    en_US: Reddit Post Comments
+    zh_Hans: Reddit 帖子评论
+description:
+  human:
+    en_US: 'Comments on a Reddit post with the first levels of replies: text, commenter, score and reply count. About 10 comments per call. Accepts a post ID or link.'
+    zh_Hans: Reddit 帖子下的评论，连同前几层回复：内容、评论者、得分和回复数。每次调用约 10 条。可以填帖子 ID 或链接。
+  llm: List comments on a Reddit post with the first levels of replies (parent_id says which comment a reply answers). Input the post id (with or without t3_) or any Reddit post link, share links included. Returns about 10 comments per page with text, author, score and reply count. Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Post ID or link
+    zh_Hans: 帖子 ID 或链接
+  human_description:
+    en_US: The post ID from post search (with or without t3_), or a reddit.com post or share link.
+    zh_Hans: 帖子搜索结果里的 ID（带不带 t3_ 都行），或 reddit.com 帖子链接、分享链接。
+  llm_description: The Reddit post id (from Reddit Post Search results, with or without the t3_ prefix) or a Reddit post link.
+  placeholder:
+    en_US: https://www.reddit.com/r/nasa/comments/1nnrvkr/
+    zh_Hans: https://www.reddit.com/r/nasa/comments/1nnrvkr/
+- name: sort
+  type: select
+  required: false
+  form: llm
+  default: best
+  label:
+    en_US: Order
+    zh_Hans: 排序
+  human_description:
+    en_US: Comment order.
+    zh_Hans: 评论排序。
+  llm_description: best (default, Reddit's own order), latest or popular (top score).
+  options:
+  - value: best
+    label:
+      en_US: Best (Reddit's default)
+      zh_Hans: 默认排序
+  - value: latest
+    label:
+      en_US: Newest
+      zh_Hans: 最新
+  - value: popular
+    label:
+      en_US: Top score
+      zh_Hans: 最高分
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/reddit_post_comments.py

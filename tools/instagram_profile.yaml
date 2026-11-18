@@ -1,0 +1,60 @@
+identity:
+  name: instagram_profile
+  author: okdata
+  label:
+    en_US: Instagram Profile
+    zh_Hans: Instagram 账号信息
+description:
+  human:
+    en_US: 'An Instagram account by handle: name, bio, followers, following, post count, verification and the links on the profile.'
+    zh_Hans: 按用户名取 Instagram 账号：名称、简介、粉丝数、关注数、帖子数、认证情况，以及主页上的链接。
+  llm: 'Get an Instagram account''s public profile by handle (with or without @, or an instagram.com/<handle> link): name, bio, followers, following, post count, whether it is verified or private, and the website and links on the profile. Billed per call.'
+parameters:
+- name: username
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Handle
+    zh_Hans: 用户名
+  human_description:
+    en_US: The account's handle, with or without @, or its instagram.com profile link.
+    zh_Hans: 账号的用户名，带不带 @ 都行，也可以填 instagram.com 主页链接。
+  llm_description: The Instagram handle (with or without @) or an instagram.com/<handle> link.
+  placeholder:
+    en_US: nasa
+    zh_Hans: nasa
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    item:
+      type: object
+      description: The object returned
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/instagram_profile.py

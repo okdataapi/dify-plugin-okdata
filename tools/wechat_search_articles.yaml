@@ -101,9 +101,9 @@ parameters:
     en_US: Cursor (next page)
     zh_Hans: 翻页 cursor
   human_description:
-    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate, separately billed call.
-    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独计费的调用。
-  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is billed as a separate call.'
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
 - name: max_price
   type: number
   required: false
@@ -115,8 +115,8 @@ parameters:
     en_US: Max price per call (USD)
     zh_Hans: 单次调用最高价格（美元）
   human_description:
-    en_US: okdata refuses any call that could cost more than this before it runs, and bills nothing for it. Raise it if an endpoint's price goes up.
-    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝，不扣钱。接口涨价时调高这个值。
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
 output_schema:
   type: object
   properties:

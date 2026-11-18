@@ -2,16 +2,16 @@ identity:
   author: okdata
   name: okdata
   label:
-    en_US: okdata Social Data
-    zh_Hans: okdata 社媒数据
+    en_US: TikTok, YouTube, Instagram, X & Reddit Data (okdata)
+    zh_Hans: 小红书 抖音 公众号 TikTok 数据（okdata）
   description:
-    en_US: "Social media data for workflows and agents: TikTok, RedNote (Xiaohongshu), Douyin, WeChat Official Accounts, Weibo, X, YouTube and 10 more platforms. Search posts, read comments, hot lists, article reads and transcripts with one okdata API key, billed per call."
-    zh_Hans: "给工作流和智能体用的社媒数据：抖音、小红书、公众号、视频号、微博、B站、快手、TikTok、X、YouTube 等 17 个平台。搜笔记和视频、拉评论、看热搜、查公众号阅读数、取字幕，一个 okdata Key 按次计费。"
+    en_US: "Search and read public data from TikTok, YouTube, Instagram, X (Twitter), Reddit and Amazon, plus RedNote (Xiaohongshu), Douyin, WeChat, Bilibili and Weibo: videos, posts, comments, transcripts, profiles, trending topics, products and reviews. 230+ endpoints on 23 platforms with one API key, no platform accounts or cookies. Pay per call, no subscription; new accounts get trial credit."
+    zh_Hans: "搜小红书笔记、抖音视频和公众号文章，拉评论，看热搜，查公众号阅读数，视频号、微博、B站、快手、知乎也能查。TikTok、YouTube、Instagram、X、Reddit、亚马逊的公开数据同样能取，包括视频字幕、商品和买家评论。23 个平台、230 多个接口，一个 okdata Key 就能用，不需要平台账号和 Cookie。按次付费，不用订阅，新账号有试用额度。"
   icon: icon.svg
   tags:
     - social
-    - search
     - videos
+    - business
 credentials_for_provider:
   okdata_api_key:
     type: secret-input
@@ -23,22 +23,33 @@ credentials_for_provider:
       en_US: okd_...
       zh_Hans: okd_...
     help:
-      en_US: Create a key in the okdata console (new accounts get trial credit). Each data call is billed to this key's balance, also when the answer is empty or the data source fails; looking up endpoints is free.
-      zh_Hans: 在 okdata 控制台创建 Key（新账号有试用额度）。每次数据调用从这个 Key 的余额扣费，返回为空或数据源出错也一样；查接口不扣钱。
+      en_US: Create a key in the okdata console. New accounts get trial credit.
+      zh_Hans: 在 okdata 控制台创建 Key，新账号有试用额度。
     url: https://okdata.online/signup/?src=dify-plugin
 tools:
   - tools/tiktok_search_videos.yaml
+  - tools/tiktok_video_comments.yaml
+  - tools/youtube_search_videos.yaml
+  - tools/youtube_video_comments.yaml
+  - tools/youtube_transcript.yaml
+  - tools/instagram_profile.yaml
+  - tools/instagram_account_posts.yaml
+  - tools/instagram_post_comments.yaml
+  - tools/x_search_posts.yaml
+  - tools/x_trending_topics.yaml
+  - tools/reddit_search_posts.yaml
+  - tools/reddit_post_comments.yaml
+  - tools/amazon_search_products.yaml
+  - tools/amazon_product_reviews.yaml
   - tools/xiaohongshu_search_notes.yaml
   - tools/xiaohongshu_note_comments.yaml
   - tools/douyin_search_videos.yaml
   - tools/douyin_video_comments.yaml
   - tools/douyin_hot_search.yaml
-  - tools/weibo_hot_search.yaml
   - tools/wechat_search_articles.yaml
   - tools/wechat_account_articles.yaml
   - tools/wechat_article_stats.yaml
-  - tools/x_search_posts.yaml
-  - tools/youtube_transcript.yaml
+  - tools/weibo_hot_search.yaml
   - tools/find_endpoint.yaml
   - tools/call_endpoint.yaml
 extra:

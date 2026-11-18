@@ -1,0 +1,79 @@
+identity:
+  name: instagram_post_comments
+  author: okdata
+  label:
+    en_US: Instagram Post Comments
+    zh_Hans: Instagram 帖子评论
+description:
+  human:
+    en_US: 'Comments on an Instagram post or reel, newest first: text, commenter, likes and time posted. About 15 comments per call. Accepts a link or shortcode.'
+    zh_Hans: Instagram 帖子或 Reel 下的评论，从新到旧：内容、评论者、点赞和发布时间。每次调用约 15 条。可以填链接或帖子短码。
+  llm: List comments on an Instagram post or reel, newest first, about 15 per page. Input the post link (instagram.com/p/... or /reel/...) or its shortcode. Returns text, commenter, likes and time posted. Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Post link or shortcode
+    zh_Hans: 帖子链接或短码
+  human_description:
+    en_US: An instagram.com/p/... or /reel/... link, or the shortcode that follows /p/ or /reel/.
+    zh_Hans: instagram.com/p/... 或 /reel/... 链接，或链接里 /p/、/reel/ 后面那段短码。
+  llm_description: The Instagram post or reel link, or its shortcode (the part after /p/ or /reel/ in the link).
+  placeholder:
+    en_US: https://www.instagram.com/p/DeCPVhERA8e/
+    zh_Hans: https://www.instagram.com/p/DeCPVhERA8e/
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/instagram_post_comments.py

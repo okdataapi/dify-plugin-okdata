@@ -1,0 +1,79 @@
+identity:
+  name: x_trending_topics
+  author: okdata
+  label:
+    en_US: X (Twitter) Trending Topics
+    zh_Hans: X（推特）趋势
+description:
+  human:
+    en_US: What is trending on X (Twitter) right now, worldwide or in one country. About 30 topics per call.
+    zh_Hans: X（推特）当前的趋势话题，全球或某个国家。每次调用约 30 条。
+  llm: Get the trending topics on X (Twitter) right now, worldwide or for one country. Returns about 30 topics per page, in rank order, each with a link to search it on X. Use X (Twitter) Post Search to read posts about a topic. Billed per call.
+parameters:
+- name: country
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Country
+    zh_Hans: 国家
+  human_description:
+    en_US: Two-letter country code such as US, GB or JP. Leave empty for worldwide.
+    zh_Hans: 两位国家代码，如 US、GB、JP。留空表示全球。
+  llm_description: Optional ISO country code such as US, GB, JP or IN. Leave empty for worldwide trends.
+  placeholder:
+    en_US: US
+    zh_Hans: US
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.02
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/x_trending_topics.py

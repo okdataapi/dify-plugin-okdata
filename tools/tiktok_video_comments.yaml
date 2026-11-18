@@ -1,0 +1,79 @@
+identity:
+  name: tiktok_video_comments
+  author: okdata
+  label:
+    en_US: TikTok Video Comments
+    zh_Hans: TikTok 视频评论
+description:
+  human:
+    en_US: Comments on a TikTok video, with likes and reply counts. About 50 comments per call. Accepts a video ID or link.
+    zh_Hans: TikTok 视频下的评论，带点赞数和回复数。每次调用约 50 条。可以填视频 ID 或链接。
+  llm: List comments on a TikTok video. Input the numeric video id (from TikTok Video Search results) or a tiktok.com/@user/video/<id> link. Returns about 50 comments per page with text, author, likes and replies. Billed per call.
+parameters:
+- name: id
+  type: string
+  required: true
+  form: llm
+  label:
+    en_US: Video ID or link
+    zh_Hans: 视频 ID 或链接
+  human_description:
+    en_US: The numeric video ID from video search, or a tiktok.com/@user/video/... link.
+    zh_Hans: 视频搜索结果里的数字 ID，或 tiktok.com/@用户名/video/... 链接。
+  llm_description: The TikTok video id (digits, from TikTok Video Search results) or a tiktok.com/@user/video/<id> link.
+  placeholder:
+    en_US: '7305085486984858894'
+    zh_Hans: '7305085486984858894'
+- name: cursor
+  type: string
+  required: false
+  form: llm
+  label:
+    en_US: Cursor (next page)
+    zh_Hans: 翻页 cursor
+  human_description:
+    en_US: Leave empty for the first page. For the next page, pass next_cursor from the previous result. Each page is a separate call.
+    zh_Hans: 第一页留空。要下一页时，填上一次结果里的 next_cursor。每翻一页都是一次单独的调用。
+  llm_description: 'Leave empty for the first page. Only for the next page: pass next_cursor from the previous result of this tool with the same inputs. Each page is a separate call.'
+- name: max_price
+  type: number
+  required: false
+  form: form
+  default: 0.01
+  min: 0.0001
+  max: 100
+  label:
+    en_US: Max price per call (USD)
+    zh_Hans: 单次调用最高价格（美元）
+  human_description:
+    en_US: okdata refuses any call that could cost more than this, before it runs. Raise it if an endpoint's price goes up.
+    zh_Hans: 可能超过这个价格的调用会在执行前被拒绝。接口涨价时调高这个值。
+output_schema:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        type: object
+      description: The results on this page
+    next_cursor:
+      type: string
+      description: Pass as cursor to get the next page; empty when there is none
+    has_more:
+      type: boolean
+      description: Whether another page exists
+    cost:
+      type: string
+      description: What this call cost, in US dollars
+    balance_after:
+      type: string
+      description: okdata balance left after this call, in US dollars
+    request_id:
+      type: string
+      description: okdata request ID, for support
+    result_status:
+      type: string
+      description: complete, partial or empty
+extra:
+  python:
+    source: tools/tiktok_video_comments.py

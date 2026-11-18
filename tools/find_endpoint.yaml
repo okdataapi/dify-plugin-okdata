@@ -6,9 +6,9 @@ identity:
     zh_Hans: 查找 okdata 接口（免费）
 description:
   human:
-    en_US: 'Search okdata''s 200+ endpoints on 17 platforms by plain words in English or Chinese, with each one''s price and parameters. Free: no call is billed.'
-    zh_Hans: 用中文或英文描述你要的数据，在 17 个平台的 200 多个 okdata 接口里查找，返回价格和参数。免费，不扣钱。
-  llm: Free lookup. Find okdata endpoints for a data need described in plain words (English or Chinese), e.g. 'kuaishou video comments', 'instagram profile', 'bilibili popular'. Returns endpoint ids with price, required and optional params. Then use the Call Any okdata Endpoint tool with that endpoint_id.
+    en_US: Search okdata's 230+ endpoints on 23 platforms by plain words in English or Chinese, with each one's price and parameters. This lookup is free.
+    zh_Hans: 用中文或英文描述你要的数据，在 23 个平台的 230 多个 okdata 接口里查找，返回价格和参数。查找免费。
+  llm: Free lookup. Find okdata endpoints for a data need described in plain words (English or Chinese), e.g. 'aliexpress product reviews', 'telegram channel messages', 'kuaishou video comments'. Returns endpoint ids with price, required and optional params. Then use the Call Any okdata Endpoint tool with that endpoint_id.
 parameters:
 - name: query
   type: string
@@ -34,12 +34,48 @@ parameters:
   human_description:
     en_US: Only endpoints of this platform. Leave empty for all.
     zh_Hans: 只看这个平台的接口。留空表示全部。
-  llm_description: 'Optional platform id to narrow the search: tiktok, xiaohongshu, douyin, wechat_mp, wechat_channels, wechat, weibo, bilibili, kuaishou, zhihu, x, youtube, instagram, reddit, telegram, meta, google.'
+  llm_description: 'Optional platform id to narrow the search: tiktok, youtube, instagram, x, reddit, amazon, aliexpress, telegram, meta, google, xiaohongshu, douyin, wechat_mp, wechat_channels, wechat, bilibili, weibo, kuaishou, zhihu, taobao, alibaba_1688, xianyu, douyin_shop.'
   options:
   - value: tiktok
     label:
       en_US: TikTok
       zh_Hans: TikTok
+  - value: youtube
+    label:
+      en_US: YouTube
+      zh_Hans: YouTube
+  - value: instagram
+    label:
+      en_US: Instagram
+      zh_Hans: Instagram
+  - value: x
+    label:
+      en_US: X (Twitter)
+      zh_Hans: X（推特）
+  - value: reddit
+    label:
+      en_US: Reddit
+      zh_Hans: Reddit
+  - value: amazon
+    label:
+      en_US: Amazon
+      zh_Hans: 亚马逊
+  - value: aliexpress
+    label:
+      en_US: AliExpress
+      zh_Hans: 速卖通
+  - value: telegram
+    label:
+      en_US: Telegram
+      zh_Hans: Telegram
+  - value: meta
+    label:
+      en_US: Meta Ad Library
+      zh_Hans: Meta 广告库
+  - value: google
+    label:
+      en_US: Google Ads Transparency
+      zh_Hans: Google 广告透明中心
   - value: xiaohongshu
     label:
       en_US: RedNote (Xiaohongshu)
@@ -60,14 +96,14 @@ parameters:
     label:
       en_US: WeChat Search
       zh_Hans: 微信搜一搜
-  - value: weibo
-    label:
-      en_US: Weibo
-      zh_Hans: 微博
   - value: bilibili
     label:
       en_US: Bilibili
       zh_Hans: B站
+  - value: weibo
+    label:
+      en_US: Weibo
+      zh_Hans: 微博
   - value: kuaishou
     label:
       en_US: Kuaishou
@@ -76,34 +112,22 @@ parameters:
     label:
       en_US: Zhihu
       zh_Hans: 知乎
-  - value: x
+  - value: taobao
     label:
-      en_US: X (Twitter)
-      zh_Hans: X（推特）
-  - value: youtube
+      en_US: Taobao & Tmall
+      zh_Hans: 淘宝天猫
+  - value: alibaba_1688
     label:
-      en_US: YouTube
-      zh_Hans: YouTube
-  - value: instagram
+      en_US: '1688'
+      zh_Hans: '1688'
+  - value: xianyu
     label:
-      en_US: Instagram
-      zh_Hans: Instagram
-  - value: reddit
+      en_US: Xianyu (Goofish)
+      zh_Hans: 闲鱼
+  - value: douyin_shop
     label:
-      en_US: Reddit
-      zh_Hans: Reddit
-  - value: telegram
-    label:
-      en_US: Telegram
-      zh_Hans: Telegram
-  - value: meta
-    label:
-      en_US: Meta Ad Library
-      zh_Hans: Meta 广告库
-  - value: google
-    label:
-      en_US: Google Ads Transparency
-      zh_Hans: Google 广告透明中心
+      en_US: Douyin Shop
+      zh_Hans: 抖音电商
 - name: limit
   type: number
   required: false

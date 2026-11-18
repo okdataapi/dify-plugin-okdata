@@ -7,6 +7,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+from dify_plugin.entities.tool import ToolLabelEnum
+
 from okdata_api import catalog, client, generic, runner, summary
 from tests.conftest import ROOT, TEST_KEY, collect, ok_envelope
 from tests.test_tools import run_tool
@@ -123,6 +125,21 @@ class TestSummary:
         text = summary.summarize("Search", envelope)
         assert "0 results" in text and "returned nothing" in text and "cursor = c1.n" in text
 
+    def test_products_show_price_stars_and_ratings(self):
+        product = {"id": "B0GTS6KPPB", "title": "Espresso maker", "price": 109.99, "currency": "USD", "rating": 4.3, "reviews": 1190, "url": "https://www.amazon.com/dp/B0GTS6KPPB"}
+        text = summary.summarize("Amazon product search", ok_envelope({"items": [product]}))
+        assert "1. Espresso maker | USD 109.99 | 4.3 stars | 1.2k ratings" in text
+
+    def test_reviews_show_stars(self):
+        review = {"id": "R1", "text": "Great espresso!", "rating": 5, "published_at": "2026-10-09T00:00:00.000Z"}
+        text = summary.summarize("Amazon product reviews", ok_envelope({"items": [review]}))
+        assert "1. Great espresso! | 5 stars | 2026-10-09" in text
+
+    def test_odd_numbers_are_left_out(self):
+        item = {"title": "t", "price": float("nan"), "rating": True, "reviews": "many"}
+        assert "1. t" in summary.summarize("Search", ok_envelope({"items": [item]}))
+        assert "stars" not in summary.summarize("Search", ok_envelope({"items": [item]}))
+
     def test_low_balance_is_flagged(self):
         envelope = ok_envelope({"items": []})
         envelope["meta"]["billing"]["covers_next"] = False
@@ -169,7 +186,59 @@ class TestPackageConsistency:
             endpoint = catalog.get_endpoint(catalog_body["data"], spec.endpoint_id)
             api_params = {p["name"] for p in endpoint["params"]}
             assert set(spec.params) <= api_params, spec.endpoint_id
+            assert set(spec.links.values()) <= api_params, spec.endpoint_id
+            assert set(spec.links) <= set(spec.params), spec.endpoint_id
             assert Decimal(endpoint["maxCharge"]) <= Decimal(spec.max_price), spec.endpoint_id
+
+    @pytest.mark.parametrize("name", sorted(runner.SPECS))
+    def test_select_options_are_values_the_endpoint_takes(self, catalog_body, name):
+        endpoint = catalog.get_endpoint(catalog_body["data"], runner.SPECS[name].endpoint_id)
+        enums = {p["name"]: set(p["enum"]) for p in endpoint["params"] if p.get("enum")}
+        for param in self.tool_yaml(name)["parameters"]:
+            if param["type"] == "select" and param["name"] in enums:
+                assert {o["value"] for o in param["options"]} <= enums[param["name"]], (name, param["name"])
+
+    def test_provider_lists_global_platforms_first_and_generic_tools_last(self, catalog_body):
+        provider = yaml.safe_load((ROOT / "provider" / "okdata.yaml").read_text(encoding="utf-8"))
+        names = [Path(p).stem for p in provider["tools"]]
+        assert names[-2:] == ["find_endpoint", "call_endpoint"]
+        region = {p["id"]: p["region"] for p in catalog_body["data"]["platforms"]}
+        regions = [region[runner.SPECS[n].endpoint_id.split(".")[0]] for n in names[:-2]]
+        assert regions == sorted(regions, key=lambda r: r != "global"), regions
+
+    def test_versions_match(self):
+        manifest = yaml.safe_load((ROOT / "manifest.yaml").read_text(encoding="utf-8"))
+        assert client.USER_AGENT == f"okdata-dify-plugin/{manifest['version']}"
+
+    def test_manifest_and_provider_show_the_same_card(self):
+        manifest = yaml.safe_load((ROOT / "manifest.yaml").read_text(encoding="utf-8"))
+        identity = yaml.safe_load((ROOT / "provider" / "okdata.yaml").read_text(encoding="utf-8"))["identity"]
+        for key in ("label", "description", "tags"):
+            assert manifest[key] == identity[key], key
+        assert 1 <= len(manifest["tags"]) <= 3
+        assert set(manifest["tags"]) <= {t.value for t in ToolLabelEnum}
+        for text in (*manifest["label"].values(), *manifest["description"].values()):
+            assert 0 < len(text) < 1024
+
+
+LISTING_FILES = sorted(
+    [*(ROOT / "tools").glob("*.yaml"), ROOT / "provider" / "okdata.yaml", ROOT / "manifest.yaml", ROOT / "README.md", ROOT / "readme" / "README_zh_Hans.md", ROOT / "PRIVACY.md"]
+)
+# Listing text says what things cost, never what is or is not charged when something goes wrong.
+CHARGING_RULE_PHRASES = (
+    "bills nothing", "cost nothing", "costs nothing", "billed even", "billed again", "is billed when", "not billed",
+    "refund", "no call is billed", "不扣钱", "不扣费", "照常计费", "再扣", "也一样", "退款",
+)
+STALE_COUNTS = ("17 platforms", "200+", "17 个平台", "200 多个")
+
+
+@pytest.mark.parametrize("path", LISTING_FILES, ids=lambda p: p.name)
+def test_listing_text_follows_the_listing_rules(path):
+    text = path.read_text(encoding="utf-8")
+    lowered = text.lower()
+    assert not [p for p in CHARGING_RULE_PHRASES if p in lowered]
+    assert not [c for c in STALE_COUNTS if c in text]
+    assert "\u2014" not in text  # no em dashes
 
 
 class TestCallEndpointHardening:
