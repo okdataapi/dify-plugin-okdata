@@ -4,6 +4,7 @@ Public data from TikTok, YouTube, Instagram, X (Twitter), Reddit and Amazon for 
 
 Pay per call, no subscription. Every endpoint has its own price, and new accounts get trial credit.
 
+- Dify Marketplace: https://marketplace.dify.ai/plugin/okdata/okdata
 - Source repository: https://github.com/okdataapi/dify-plugin-okdata
 - Simplified Chinese README: [readme/README_zh_Hans.md](readme/README_zh_Hans.md)
 
@@ -50,7 +51,7 @@ Prices are per call at release; each page of results is a separate call. Live pr
 ## Setup
 
 1. Sign up at [okdata.online](https://okdata.online/signup/?src=dify-plugin) with your email. New accounts get trial credit, and the console makes your first API key (it starts with `okd_`).
-2. In Dify, install the plugin from the Marketplace, open it under **Tools**, choose to authorize it and paste the API key. Dify checks the key by reading your balance.
+2. In Dify, install the plugin from the Marketplace ([okdata on the Dify Marketplace](https://marketplace.dify.ai/plugin/okdata/okdata)), open it under **Tools**, choose to authorize it and paste the API key. Dify checks the key by reading your balance.
 3. Add a tool to a workflow or an agent and run it.
 
 Use a key made for this Dify workspace: everyone who can run its apps spends that key's balance. You can give the key daily or monthly spending limits in the okdata console.

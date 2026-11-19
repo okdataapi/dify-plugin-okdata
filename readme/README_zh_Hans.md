@@ -50,7 +50,7 @@
 ## 配置
 
 1. 在 [okdata.online](https://okdata.online/zh/signup/?src=dify-plugin) 用邮箱注册。新账号有试用额度，控制台会自动生成第一个 API Key（以 `okd_` 开头）。支付宝、微信、银行卡都能充值。
-2. 在 Dify 插件市场安装本插件，在 **工具** 里打开它，选择授权并粘贴 API Key。Dify 会读一次余额来检查这个 Key。
+2. 在 Dify 插件市场安装本插件（[插件市场页面](https://marketplace.dify.ai/plugin/okdata/okdata)），在 **工具** 里打开它，选择授权并粘贴 API Key。Dify 会读一次余额来检查这个 Key。
 3. 把工具加进工作流或智能体，运行。
 
 建议给这个 Dify 工作空间单独建一个 Key，因为能运行其中应用的人都会用这个 Key 的余额。在 okdata 控制台可以给 Key 设每日或每月消费上限。
