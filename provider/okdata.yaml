@@ -5,7 +5,7 @@ identity:
     en_US: TikTok, YouTube, Instagram, X & Reddit Data (okdata)
     zh_Hans: 小红书 抖音 公众号 TikTok 数据（okdata）
   description:
-    en_US: "Search and read public data from TikTok, YouTube, Instagram, X (Twitter), Reddit and Amazon, plus RedNote (Xiaohongshu), Douyin, WeChat, Bilibili and Weibo: videos, posts, comments, transcripts, profiles, trending topics, products and reviews. 230+ endpoints on 23 platforms with one API key, no platform accounts or cookies. Pay per call, no subscription; new accounts get a free trial of up to 333 calls."
+    en_US: "Search and read public data from TikTok, YouTube, Instagram, X (Twitter), Reddit and Amazon, plus RedNote (Xiaohongshu), Douyin, WeChat, Bilibili and Weibo: videos, posts, comments, transcripts, profiles, trending topics, products and reviews. 230+ endpoints on 23 platforms with one API key, no platform accounts or cookies. Pay per call, no subscription; new accounts get trial credit."
     zh_Hans: "搜小红书笔记、抖音视频和公众号文章，拉评论，看热搜，查公众号阅读数，视频号、微博、B站、快手、知乎也能查。TikTok、YouTube、Instagram、X、Reddit、亚马逊的公开数据同样能取，包括视频字幕、商品和买家评论。23 个平台、230 多个接口，一个 okdata Key 就能用，不需要平台账号和 Cookie。按次付费，不用订阅，新账号有试用额度。"
   icon: icon.svg
   tags:
@@ -23,7 +23,7 @@ credentials_for_provider:
       en_US: okd_...
       zh_Hans: okd_...
     help:
-      en_US: Create a key in the okdata console. New accounts get a free trial of up to 333 calls.
+      en_US: Create a key in the okdata console. New accounts get trial credit.
       zh_Hans: 在 okdata 控制台创建 Key，新账号有试用额度。
     url: https://okdata.online/signup/?src=dify-plugin
 tools:

@@ -2,7 +2,7 @@
 
 Public data from TikTok, YouTube, Instagram, X (Twitter), Reddit and Amazon for Dify workflows and agents, plus RedNote (Xiaohongshu), Douyin, WeChat, Bilibili and Weibo. Search videos, posts and products; read comments, reviews, profiles, transcripts and trending topics. One [okdata](https://okdata.online/?src=dify-plugin) API key covers 230+ endpoints on 23 platforms. You need no platform accounts, cookies or QR logins.
 
-Pay per call, no subscription. Every endpoint has its own price, and new accounts get a free trial of up to 333 calls.
+Pay per call, no subscription. Every endpoint has its own price, and new accounts get trial credit.
 
 - Dify Marketplace: https://marketplace.dify.ai/plugin/okdata/okdata
 - Source repository: https://github.com/okdataapi/dify-plugin-okdata
@@ -50,7 +50,7 @@ Prices are per call at release; each page of results is a separate call. Live pr
 
 ## Setup
 
-1. Sign up at [okdata.online](https://okdata.online/signup/?src=dify-plugin) with your email. New accounts get a free trial of up to 333 calls, and the console makes your first API key (it starts with `okd_`).
+1. Sign up at [okdata.online](https://okdata.online/signup/?src=dify-plugin) with your email. New accounts get trial credit, and the console makes your first API key (it starts with `okd_`).
 2. In Dify, install the plugin from the Marketplace ([okdata on the Dify Marketplace](https://marketplace.dify.ai/plugin/okdata/okdata)), open it under **Tools**, choose to authorize it and paste the API key. Dify checks the key by reading your balance.
 3. Add a tool to a workflow or an agent and run it.
 
